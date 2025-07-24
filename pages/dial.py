@@ -24,15 +24,21 @@ st.markdown(f"""
 
 with open("data/dial.json", "r", encoding="utf-8") as f:
     dials = json.load(f)
-    
+
+dialbox_html = ""
 for dial in dials:
-    st.markdown(f"""
-                <div style="">
-                    <div style="font-size:20px; font-weight:700; letter-spacing:-0.2px; color:#ff762d">{dial['전화번호']}</div>
-                    <div style="margin-bottom:15px;">{dial['기관']}</div>
-                    <a href="tel:119" style="display:flex; background-color: black; padding:10px 15px; text-decoration:none; width:150px; align-items:center; border-radius:100px; justify-content:center;">
-                        <div style="text-decoration:none; color:#ff762d; font-size:12px; font-weight:600;">바로 전화 걸기</div>
-                        <img src="data:image/svg+xml;base64,{call_img}" style="width:20px;"/>
-                    </a>
-                </div>
-                """, unsafe_allow_html=True)
+    dialbox_html += f"""
+    <div style="margin-bottom:20px; width:160px; box-shadow:0px 2px 8px rgba(0,0,0,0.15); padding: 25px 15px; border-radius:20px;">
+        <div style="font-size:20px; font-weight:700; letter-spacing:-0.2px; color:#ff762d">{dial['전화번호']}</div>
+        <div style="margin-bottom:15px;">{dial['기관']}</div>
+        <a href="tel:{dial['번호']}" style="display:flex; background-color: black; padding:10px 15px; text-decoration:none; width:120px; align-items:center; border-radius:100px; justify-content:center;">
+            <div style="text-decoration:none; color:#ff762d; font-size:12px; font-weight:600;">바로 전화 걸기</div>
+            <img src="data:image/svg+xml;base64,{call_img}" style="width:20px;"/>
+        </a>
+    </div>
+    """
+    
+st.markdown(f"""
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px; place-items:center;">
+            {dialbox_html}
+            """, unsafe_allow_html=True)
