@@ -80,7 +80,7 @@ for message in st.session_state.messages:
                         "border-radius": "100px",
                         "margin": "6px 6px",
                         "border": "2px solid #ffb894",
-                        "width": "185px",
+                        "width": "165px",
                         "padding": "12px 1px"
                     },
                     "nav-link-selected": {"background-color": "#ffb894", "color": "white"},

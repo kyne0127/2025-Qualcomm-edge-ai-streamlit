@@ -47,6 +47,7 @@ st.markdown("""
         background-color: #ff762d;
         border-radius: 100px;
         padding: 1rem 1.5rem;
+        font-size: 14px;
     }
     .submit-btn{
         background-color: black;
@@ -94,7 +95,7 @@ selected = option_menu(
             "border-radius": "100px",
             "margin": "6px 6px",
             "border": "2px solid #ff762d",
-            "width": "185px",
+            "width": "165px",
             "padding": "12px 1px"
         },
         "nav-link-selected": {"background-color": "#ff762d", "color": "white"},

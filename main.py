@@ -73,7 +73,7 @@ a.guide-button {
     color: #ff762d;
     font-weight: bold;
     font-size: 16px;
-    width: 100px;
+    width: 85px;
     text-align: center;
 }
 .guide-button-right {

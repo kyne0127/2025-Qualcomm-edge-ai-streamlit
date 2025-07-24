@@ -39,6 +39,6 @@ for dial in dials:
     """
     
 st.markdown(f"""
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px; place-items:center;">
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:10px; place-items:center;">
             {dialbox_html}
             """, unsafe_allow_html=True)
