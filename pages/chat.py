@@ -42,10 +42,11 @@ if "messages" not in st.session_state:
     st.session_state.is_loading = False
     st.session_state.initial = True
 
-category_list = ['선택 안함', '지하구조물 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
+category_list = ['선택 안함', '구조물/건물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
 
 for message in st.session_state.messages:
     if not message['isUser']:
+        message['text'] = message['text'].replace('\n', '<br/>')
         st.markdown(f"""
                     <div style="display:flex; justify-content: flex-start; margin-top:8px; margin-bottom:8px;">
                         <div style="display:flex; justify-content:center; align-items:center; width:40px; height:40px; border-radius:100%; background-color:black; margin-right:7px;">
@@ -87,7 +88,32 @@ for message in st.session_state.messages:
             )
             if selected != "선택 안함":
                 st.session_state.category = selected
-                st.session_state.messages.append({'text': f"{selected} 카테고리를 선택하셨습니다.", 'isUser': False})
+                if selected == "구조물/건물 고립 사고":
+                    st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
+                                                                    [예시 질문]\n
+                                                                    1. 지하차도에 고립되어 있을 때 가장 먼저 뭐를 해야할까?\n
+                                                                    2. 건물이 붕괴되었는데 출입문을 찾으려면 어떻게 해야돼?\n
+                                                                    3. 침수된 지하주차장에 갇혀 있는데 뭐부터 해야돼?""", 'isUser': False})
+                elif selected == '고온산업시설 사고':
+                    st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
+                                                                    [예시 질문]\n
+                                                                    - 산업시설에 고립되어 있을 때 가장 먼저 뭐를 해야할까?\n
+                                                                    - 주변 온도가 점점 뜨거워질 때 어떻게 대처해야해?\n
+                                                                    - 건물 비상 출입구는 보통 어디에 있어?""", 'isUser': False})
+                
+                elif selected == '해상 사고':
+                    st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
+                                                                    [예시 질문]\n
+                                                                    - 해상에서 조난 당했을 때 조난 신호는 어떻게 보내?\n
+                                                                    - 배가 침몰하고 있는데 지금 대피해야 돼 아니면 선박에 있어야돼?\n
+                                                                    - 언제 구명정 하강이 가능해?""", 'isUser': False})
+                    
+                elif selected == '산악 사고':
+                    st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
+                                                                    [예시 질문]\n
+                                                                    - 산 등산 중 길을 아예 잃었을 떄는 뭐부터 해야돼?\n
+                                                                    - 저체온증을 막으려면 어떻게 해야될까?\n
+                                                                    - 야생 곰을 만났을 때는 어떻게 하는게 가장 안전해?""", 'isUser': False})
                 st.session_state.initial = False
                 
     else: 
@@ -98,15 +124,7 @@ for message in st.session_state.messages:
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
-    # if not message['isUser'] and st.session_state.initial:
-    #     cols = st.columns(2)
-    #     for i, cat in enumerate(category_list):
-    #         with cols[i % 2]:
-    #             is_selected = (st.session_state.category == cat)
-    #             if st.button(cat, key=f"cat_{i}", use_container_width=True):
-    #                 st.session_state.category = cat
-    #                 st.session_state.messages.append({"text": f"{cat} 카테고리를 선택하셨습니다.", "isUser": False})
-    #                 st.session_state.initial = False
+
 
 if st.session_state.is_loading:
     st.markdown()

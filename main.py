@@ -134,7 +134,8 @@ a.case-btn {
     font-size: 13px;
     margin-top: 0.5rem;
 }
-.call-button {
+a.call-button {
+    text-decoration: none;
     background-color: #ff762d;
     color: black;
     padding: 0.7rem 1.5rem;
@@ -183,9 +184,9 @@ st.markdown(f"""
 <div class="footer">
     <div class="footer-title">구조 요청은 하셨나요?</div>
     <div class="footer-sub">가이드라인을 받기 전에, 구조 요청이 가장 먼저입니다.</div>
-    <div class="call-button">
+    <a href="/dial" target="_self" class="call-button">
         전화번호부 보기
         <img src="data:image/svg+xml;base64,{arrow_img}" style="height:16px; width:auto;"/>
-    </div>
+    </a>
 </div>
 """, unsafe_allow_html=True)

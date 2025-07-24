@@ -90,14 +90,15 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # search form
-st.markdown('<div class="search-row" style="display:flex; background-color:black;">', unsafe_allow_html=True)
+# st.markdown('<div class="search-row" style="display:flex; background-color:black;">', unsafe_allow_html=True)
 
-col1, col2 = st.columns([3, 1])
-input_placeholder = "키워드나 간단한 상황을 입력해보세요"
-keyword = col1.text_input("", placeholder=input_placeholder, label_visibility="collapsed", key="search_input")
+# col1, col2 = st.columns([3, 1])
+# input_placeholder = "키워드나 간단한 상황을 입력해보세요"
+# keyword = col1.text_input("", placeholder=input_placeholder, label_visibility="collapsed", key="search_input")
 
-search_button = col2.button("🔍", key="search_btn")
-st.markdown('</div>', unsafe_allow_html=True)
+# search_button = col2.button("🔍", key="search_btn")
+# st.markdown('</div>', unsafe_allow_html=True)
+keyword = st.chat_input("키워드나 간단한 상황을 입력하세요...")
 
 results = [{'title': '화재', 'contents': '건물에서 화재가 발생했다.', 'date': '2020-01-09'},
            {'title': '지하구조물 고립', 'contents': '많은 양의 비로 아파트 지하주차장이 침수되었는데, 차를 빼러 내려간 주민 1명이 지하주차장에 고립되었다가 구조되었다.', 'date': '2020-01-09'},
@@ -106,26 +107,26 @@ results = [{'title': '화재', 'contents': '건물에서 화재가 발생했다.
         ]
 
 # if button has been pressed
-if search_button:
-    if keyword.strip():
-        with st.spinner(f"'{keyword}'에 대한 사례를 검색 중입니다."):
-            time.sleep(0.5)
-            #실제로 여기에 db query 코드 삽입
-        st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
-        for result in results:
-            st.markdown(f"""
-                        <div style="background-color: white; padding: 20px 18px; border-radius:20px; width: 396px; height: 200px; margin-bottom: 30px;">
-                            <div style="display:flex;">
-                                <div style="color:#ff762d; font-weight:600; font-size:22px; letter-spacing:-0.2px; margin-bottom:-2px;">{result['title']}</div>
-                                <img src="data:image/svg+xml;base64,{paper_img}" style="width:20px; margin-left:5px;"/>
-                            </div>
-                            <div style="color:#a6a6a6; font-size:12px; letter-spacing:-0.2px; margin-bottom:15px;">{result['date']}</div>
-                            <div>{result['contents']}</div>
-                        </div>
-                        """, unsafe_allow_html=True)
-        
-        
-        st.markdown(f"</div>", unsafe_allow_html=True)
-        
-    else:
+
+if keyword:
+    keyword = keyword.strip()
+    if not keyword:
         st.warning("키워드를 입력해주세요.")
+    with st.spinner(f"'{keyword}'에 대한 사례를 검색 중입니다."):
+        time.sleep(0.5)
+        #실제로 여기에 db query 코드 삽입
+    st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
+    for result in results:
+        st.markdown(f"""
+                    <div style="background-color: white; padding: 20px 18px; border-radius:20px; width: 396px; height: 200px; margin-bottom: 30px;">
+                        <div style="display:flex;">
+                            <div style="color:#ff762d; font-weight:600; font-size:22px; letter-spacing:-0.2px; margin-bottom:-2px;">{result['title']}</div>
+                            <img src="data:image/svg+xml;base64,{paper_img}" style="width:20px; margin-left:5px;"/>
+                        </div>
+                        <div style="color:#a6a6a6; font-size:12px; letter-spacing:-0.2px; margin-bottom:15px;">{result['date']}</div>
+                        <div>{result['contents']}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+    
+    
+    st.markdown(f"</div>", unsafe_allow_html=True)

@@ -69,7 +69,7 @@ st.markdown(f"""
             </div>
             """, unsafe_allow_html=True)
 
-options=['지하구조물 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
+options=['구조물/건물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
 
 selected = option_menu(
     menu_title=None,
@@ -149,9 +149,9 @@ if st.button("가이드라인 보기", use_container_width=True):
     else:
         st.session_state.is_loading = True
         st.session_state.is_submit = True
-        time.sleep(3)
         with st.spinner("가이드라인 생성 중..."):
             try:
+                time.sleep(2)
                 output = generate_guideline(
                     st.session_state.category, situation, place, injury
                 )
