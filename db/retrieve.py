@@ -40,6 +40,14 @@ def process_output(category, input_data, task):
 
     return response
 
+def retrieve(category, input_data):
+    global pdf_databases
+    
+    retriever = pdf_databases[category]
+    context = retriever.invoke(input_data)
+    
+    return context
+    
 
 
 
