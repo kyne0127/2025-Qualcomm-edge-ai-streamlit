@@ -1,4 +1,4 @@
-from extract import daconCustomExtractor
+from db.extract import daconCustomExtractor
 from langchain.schema import Document
 import fitz  # PyMuPDF
 

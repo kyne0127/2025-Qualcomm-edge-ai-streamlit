@@ -2,8 +2,8 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
-from create_db import process_pdfs_from_dataframe, load_pdf_databases, save_pdf_databases
-from model import get_QA_output, get_guide_line_output
+from db.create_db import process_pdfs_from_dataframe, load_pdf_databases, save_pdf_databases
+from db.model import get_QA_output, get_guide_line_output
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -11,7 +11,7 @@ warnings.filterwarnings("ignore")
 ### DB ###
 
 # 있으면 가져오고 없으면 만들기
-base_dir = "/home/a2024712006/qualcomm/"
+base_dir = "/NAS/internship/JCY/2025-summer/develop/emerGen/"
 df = pd.read_csv(base_dir + "data/full_data.csv")
 db_filename = os.path.join(base_dir, 'pdf_databases.pkl')
 if os.path.exists(db_filename):

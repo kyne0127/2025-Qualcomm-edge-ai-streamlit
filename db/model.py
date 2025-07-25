@@ -49,9 +49,10 @@ def get_LLM_output(prompt, temperature=0.6, top_p=0.9):
 
 def get_QA_output(context, input_data):
     prompt = f"""
-    You are a helpful assistant. Answer the question based on the provided context.
+    지금은 비상 재난 상황이야. 아래 question에 있는 상황에 대해서, context를 참고하여 답변을 생성해줘.
     Context: {context}
     Question: {input_data}
+    답변은 500자 이내로 간단하게 생성해줘.
     """
 
     response = get_LLM_output(prompt, 0.2)
@@ -60,9 +61,10 @@ def get_QA_output(context, input_data):
 
 def get_guide_line_output(context, input_data):
     prompt = f"""    
-    You are a helpful assistant. Provide a guideline based on the provided context.
+    지금은 비상 재난 상황이야. 아래 question에 있는 상황에 대해서, context를 참고하여 가이드라인을 생성해줘.
     Context: {context}
     Input: {input_data}
+    답변은 500자 이내로 간단하게 생성해줘.
     """
 
     response = get_LLM_output(prompt, 0.2)

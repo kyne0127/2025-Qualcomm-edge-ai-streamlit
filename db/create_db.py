@@ -7,7 +7,7 @@ from langchain_teddynote.retrievers import KiwiBM25Retriever
 from langchain.retrievers import EnsembleRetriever
 from langchain_community.vectorstores.utils import DistanceStrategy
 
-from preprocess import process_pdf
+from db.preprocess import process_pdf
 
 embeddings = HuggingFaceEmbeddings(
     model_name="BAAI/bge-m3",
@@ -40,12 +40,13 @@ def get_retriver(chunks, db):
 def process_single_pdf(path, base_directory):
     path = base_directory + path
     category = path.split('/')[-1].split('_')[0] # 카테고리 추출
+    case_or_manual = path.split('/')[-1].split('_')[1] ##메뉴얼/케이스 추출
     print(f"Processing {category}...")
     
     chunks = process_pdf(path)
     db = create_vector_db(chunks)
     retriever = get_retriver(chunks, db)
-    return category, retriever, chunks, db
+    return category, case_or_manual, retriever, chunks, db
 
 
 
@@ -57,8 +58,10 @@ def process_pdfs_from_dataframe(df, base_directory):
     unique_paths = df['Source_path'].unique() # 중복되지 않은 경로만 추출
 
     for path in tqdm(unique_paths):
-        category, retriever, chunks, db = process_single_pdf(path, base_directory)
-        pdf_databases[category] = retriever
+        category, case_or_manual, retriever, chunks, db = process_single_pdf(path, base_directory)
+        index = category + "_" + case_or_manual
+        print(index)
+        pdf_databases[index] = retriever
 
     return pdf_databases
 
@@ -74,7 +77,7 @@ def load_pdf_databases(filename):
     
 if __name__ == "__main__":
     print("Creating vector databases from PDF files...")
-    base_directory = "/home/a2024712006/qualcomm/"
+    base_directory = "/NAS/internship/JCY/2025-summer/develop/emerGen/"
     df = pd.read_csv(base_directory + "data/full_data.csv")
     pdf_databases = process_pdfs_from_dataframe(df, base_directory)
     save_pdf_databases(pdf_databases, base_directory + "pdf_databases.pkl")
