@@ -146,7 +146,8 @@ if st.button("가이드라인 보기", use_container_width=True):
                 if num_and_time: input+= f"인원 및 사건 발생 시각: {num_and_time}, "
                 if injury: input+= f"특이사항: {injury}, "
                 
-                output = process_output(st.session_state.category, input, "GuideLine")
+                index = st.session_state.category + "_" + "메뉴얼"
+                output = process_output(index, input, "GuideLine")
                 chunks = [c for c in output.split('\n') if c.strip()]
                 st.session_state.guidelines = chunks
             except Exception as e:

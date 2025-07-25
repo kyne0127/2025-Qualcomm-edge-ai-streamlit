@@ -148,7 +148,8 @@ if len(st.session_state.messages) >= 1 and st.session_state.messages[-1]["isUser
 
     with st.spinner("답변을 생성하는 중..."):
         user_text = st.session_state.messages[-1]['text']
-        response = process_output(st.session_state.category, user_text, "QA")
+        index = st.session_state.category + "_" + "메뉴얼"
+        response = process_output(index, user_text, "QA")
         
     st.session_state.messages.append({'text': response, 'isUser': False})
     st.rerun()
