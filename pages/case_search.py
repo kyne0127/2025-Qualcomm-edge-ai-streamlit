@@ -1,6 +1,8 @@
 import streamlit as st
 import time
 from utils import image_to_base64
+from db.retrieve import retrieve
+from streamlit_option_menu import option_menu
 
 st.set_page_config(page_title="case_search", layout="centered")
 
@@ -89,15 +91,43 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# search form
-# st.markdown('<div class="search-row" style="display:flex; background-color:black;">', unsafe_allow_html=True)
+#category selection
 
-# col1, col2 = st.columns([3, 1])
-# input_placeholder = "키워드나 간단한 상황을 입력해보세요"
-# keyword = col1.text_input("", placeholder=input_placeholder, label_visibility="collapsed", key="search_input")
+options=['구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
 
-# search_button = col2.button("🔍", key="search_btn")
-# st.markdown('</div>', unsafe_allow_html=True)
+selected = option_menu(
+    menu_title=None,
+    options=options,
+    # icons= ["triangle", "triangle", "triangle", "triangle"],
+    icons= [""] * len(options),
+    orientation="horizontal",
+    styles={
+        "container": {
+            "padding": "0", 
+            "background-color": "black", 
+            "flex-wrap": "wrap",
+        },
+        "icon":{
+            "display": "none",
+        },
+        "nav-link": {
+            "font-size": "14px",
+            "font-weight": "bold",
+            "text-align": "center",
+            "background-color": "black",
+            "color": "white",
+            "border-radius": "100px",
+            "margin": "6px 6px",
+            "border": "2px solid #ff762d",
+            "width": "165px",
+            "padding": "12px 1px"
+        },
+        "nav-link-selected": {"background-color": "#ff762d", "color": "white"},
+    }
+)
+
+
+#search form
 keyword = st.chat_input("키워드나 간단한 상황을 입력하세요...")
 
 results = [{'title': '화재', 'contents': '건물에서 화재가 발생했다.', 'date': '2020-01-09'},
@@ -106,27 +136,28 @@ results = [{'title': '화재', 'contents': '건물에서 화재가 발생했다.
            {'title': '화재', 'contents': '건물에서 화재가 발생했다.', 'date': '2020-01-09'},
         ]
 
-# if button has been pressed
 
+
+
+# if button has been pressed
 if keyword:
     keyword = keyword.strip()
     if not keyword:
         st.warning("키워드를 입력해주세요.")
-    with st.spinner(f"'{keyword}'에 대한 사례를 검색 중입니다."):
-        time.sleep(0.5)
-        #실제로 여기에 db query 코드 삽입
+    with st.spinner(f"'{keyword}'에 대한 사례를 vector db에서 검색 중입니다."):
+        results = retrieve(selected, keyword)
     st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
     for result in results:
         st.markdown(f"""
-                    <div style="background-color: white; padding: 20px 18px; border-radius:20px; width: 396px; height: 200px; margin-bottom: 30px;">
-                        <div style="display:flex;">
-                            <div style="color:#ff762d; font-weight:600; font-size:22px; letter-spacing:-0.2px; margin-bottom:-2px;">{result['title']}</div>
+                    <div style="background-color: white; padding: 25px 20px; border-radius:20px; width: 350px; min-height: 100px; margin-bottom: 30px;">
+                        <div style="display:flex; margin-bottom:5px;">
+                            <div style="color:#ff762d; font-weight:600; font-size:22px; letter-spacing:-0.2px; margin-bottom:-2px;">{selected}</div>
                             <img src="data:image/svg+xml;base64,{paper_img}" style="width:20px; margin-left:5px;"/>
                         </div>
-                        <div style="color:#a6a6a6; font-size:12px; letter-spacing:-0.2px; margin-bottom:15px;">{result['date']}</div>
-                        <div>{result['contents']}</div>
+                        <div>{result}</div>
                     </div>
                     """, unsafe_allow_html=True)
     
+    #<div style="color:#a6a6a6; font-size:12px; letter-spacing:-0.2px; margin-bottom:15px;">{result['date']}</div>
     
     st.markdown(f"</div>", unsafe_allow_html=True)

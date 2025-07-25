@@ -2,6 +2,7 @@ import streamlit as st
 import time
 from utils import image_to_base64
 from streamlit_option_menu import option_menu
+from db.retrieve import process_output
 
 st.set_page_config(page_title="chat", layout="centered")
 
@@ -42,7 +43,7 @@ if "messages" not in st.session_state:
     st.session_state.is_loading = False
     st.session_state.initial = True
 
-category_list = ['선택 안함', '구조물/건물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
+category_list = ['선택 안함', '구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
 
 for message in st.session_state.messages:
     if not message['isUser']:
@@ -88,7 +89,7 @@ for message in st.session_state.messages:
             )
             if selected != "선택 안함":
                 st.session_state.category = selected
-                if selected == "구조물/건물 고립 사고":
+                if selected == "구조물 고립 사고":
                     st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
                                                                     [예시 질문]\n
                                                                     1. 지하차도에 고립되어 있을 때 가장 먼저 뭐를 해야할까?\n
@@ -146,14 +147,8 @@ if len(st.session_state.messages) >= 1 and st.session_state.messages[-1]["isUser
    (len(st.session_state.messages) == 1 or st.session_state.messages[-2]["isUser"] == False):
 
     with st.spinner("답변을 생성하는 중..."):
-        time.sleep(2)
-
-    user_text = st.session_state.messages[-1]['text']
-    response = f"""{user_text}에 대한 응답입니다. 
-    이 구조는 Streamlit에서 JS 기반 입력폼을 꾸미면서도 Python에 값을 정확히 넘기는 유일한 안정적 방식입니다.
-    원한다면 다음도 추가 구현 가능:
-    쿼리 파라미터로 전달 (SEO 및 URL 공유용)
-    JS → Py로 WebSocket 전달 (비공식적)
-    검색 결과 연동 및 데이터베이스 조회"""
+        user_text = st.session_state.messages[-1]['text']
+        response = process_output(st.session_state.category, user_text, "QA")
+        
     st.session_state.messages.append({'text': response, 'isUser': False})
     st.rerun()

@@ -2,6 +2,7 @@ import streamlit as st
 from utils import image_to_base64
 import time
 from streamlit_option_menu import option_menu
+from db.retrieve import process_output
 
 st.set_page_config(page_title="guideline", layout="centered")
 
@@ -70,7 +71,7 @@ st.markdown(f"""
             </div>
             """, unsafe_allow_html=True)
 
-options=['구조물/건물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
+options=['구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
 
 selected = option_menu(
     menu_title=None,
@@ -122,26 +123,13 @@ st.markdown(f"""
                 인원 및 사고 발생 시각 설명
             </div>
             """, unsafe_allow_html=True)
-place = st.text_area(" ", placeholder="예) 노약자 1명, 어린이 2명 있음. 10분 전 사고 발생.", height=70) #인원과 재난 시각에 대해 설명합니다.
+num_and_time = st.text_area(" ", placeholder="예) 노약자 1명, 어린이 2명 있음. 10분 전 사고 발생.", height=70) #인원과 재난 시각에 대해 설명합니다.
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; margin-top:0.3rem; margin-bottom:-2.5rem;">
                 특이 사항 설명
             </div>
             """, unsafe_allow_html=True)
 injury = st.text_area(" ", placeholder="예) 휠체어 이용자가 있음, 다리 부상이 심함", height=120)
-
-
-# --- create guideline ---
-def generate_guideline(category, situation, place, injury):
-    return f"""### **긴급 대응 가이드라인**
-
-    - **카테고리**: {category or '미선택'}
-    - **상황 요약**: {situation}
-    - **주변 환경**: {place}
-    - **부상 상태**: {injury}
-
-    - 즉시 119에 신고하십시오.
-    - 가능한 안전한 위치로 이동하고, 구조를 기다리세요."""
 
 # if button is pressed
 if st.button("가이드라인 보기", use_container_width=True):
@@ -152,10 +140,13 @@ if st.button("가이드라인 보기", use_container_width=True):
         st.session_state.is_submit = True
         with st.spinner("가이드라인 생성 중..."):
             try:
-                time.sleep(2)
-                output = generate_guideline(
-                    st.session_state.category, situation, place, injury
-                )
+                # time.sleep(2)
+                input = f"상황: {situation}, "
+                if place: input+= f"장소: {place}, "
+                if num_and_time: input+= f"인원 및 사건 발생 시각: {num_and_time}, "
+                if injury: input+= f"특이사항: {injury}, "
+                
+                output = process_output(st.session_state.category, input, "GuideLine")
                 chunks = [c for c in output.split('\n') if c.strip()]
                 st.session_state.guidelines = chunks
             except Exception as e:
