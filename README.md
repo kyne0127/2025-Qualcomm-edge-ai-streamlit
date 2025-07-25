@@ -4,8 +4,9 @@
 
 ## Team UNIDs
 Chaeyeon Jang, POSTECH: jcy2749@postech.ac.kr<br>
-Taehwan Kim, SKKU: dmsdl5030@gmail.com<br>
+Taehwan Kim, SKKU: dmsdl5030@g.skku.edu<br>
 Seongmin Lee, KU: kyne0127@korea.ac.kr<br>
+Namseok Lee, KU: southstone0201@naver.com<br>
 
 ## Main Features
 #### 📑Suggest guideline based on similar past cases + pre-defined manual
