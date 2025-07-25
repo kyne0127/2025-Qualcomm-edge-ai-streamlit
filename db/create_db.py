@@ -40,7 +40,7 @@ def get_retriver(chunks, db):
 def process_single_pdf(path, base_directory):
     path = base_directory + path
     category = path.split('/')[-1].split('_')[0] # 카테고리 추출
-    case_or_manual = path.split('/')[-1].split('_')[1] ##메뉴얼/케이스 추출
+    case_or_manual = path.split('/')[-1].split('_')[1].split('.')[0] ##메뉴얼/케이스 추출
     print(f"Processing {category}...")
     
     chunks = process_pdf(path)
