@@ -60,9 +60,9 @@ def process_pdfs_from_dataframe(df, base_directory):
     for path in tqdm(unique_paths):
         category, case_or_manual, retriever, chunks, db = process_single_pdf(path, base_directory)
         index = category + "_" + case_or_manual
-        print(index)
         pdf_databases[index] = retriever
 
+    print(pdf_databases)
     return pdf_databases
 
 # local 저장
