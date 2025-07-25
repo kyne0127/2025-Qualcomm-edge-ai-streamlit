@@ -147,6 +147,7 @@ if keyword:
     with st.spinner(f"'{keyword}'에 대한 사례를 vector db에서 검색 중입니다."):
         index = selected + "_" + "사례"
         results = retrieve(index, keyword)
+        results = results.page_content
     st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
     for result in results:
         st.markdown(f"""
