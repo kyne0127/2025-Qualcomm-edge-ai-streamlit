@@ -38,7 +38,7 @@ Users can search for past emergecy cases retrieved from the vector DB by simply 
 ### Install other dependencies
 ```
 ```
-## Run Server (Only in Windows OS)
+## Run Server
 ```
 ```
 Out of the box when you enter localhost:3000
