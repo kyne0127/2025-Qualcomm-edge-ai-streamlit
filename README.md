@@ -9,18 +9,25 @@ Seongmin Lee, KU: kyne0127@korea.ac.kr<br>
 Namseok Lee, KU: southstone0201@naver.com<br>
 
 ## Main Features
-#### 📑Suggest guideline based on similar past cases + pre-defined manual
-Given a user's prompt (current emergency situation, location, injury severity), emerGen:<br> 
-1. Searches for similar past cases or relevant manuals in the vector database
-2. Combines the user's prompt with retrieved data
-3. Generates customized emergency guidelines through the LLM
+#### 📘Guideline Generation Based on Similar Cases and Predefined Manuals
+When a user provides key information such as their **current emergency situation, location, and injury severity**, **emerGen** follows a streamlined process to deliver **personalized emergency response guidelines**:
 
-#### 💬Q&A service based on Phi-2 model
-Users directly chat with the LLM to ask questions and get answers about their current emergency situation
+1. Searches a **vector database** for similar **past emergency cases** or relevant **manuals**
+2. Combines the retrieved data with the user’s input
+3. Uses a **lightweight on-device LLM** to generate a **customized emergency guideline** tailored to the situation
+🔹 By leveraging a vector DB, the system delivers accurate information without requiring additional model training, enabling fast and practical responses.
 
-#### 🔎Search past emergency response cases with keywords
-Users can search for past emergecy cases retrieved from the vector DB by simply entering keywords
+#### 💬Q&A service based on Qwen2.5 model
+Users can chat directly with the LLM to ask questions and receive real-time, situation-specific answers related to their emergency.
 
+#### 🔎Keyword-Based Search of Past Cases
+Users can simply enter keywords to search past emergency response cases and manuals stored in the vector database.
+
+#### 💡Efficient and Practical On-Device Architecture
+-The system operates as a vector DB–driven on-device application, allowing it to function independently without relying on cloud infrastructure.
+-Equipped with a small, efficient LLM, it runs smoothly even in environments with limited computing resources.
+-Since all information retrieval is handled via the vector DB, no additional model fine-tuning is needed — new data or categories can be added directly to the DB, making the system easy to maintain, cost-effective, and highly practical for real-world use.
+ 
 ## Overall Pipeline of emerGen
 "우리 이미지 넣어야함" 
 <b>Step-by-step usage scenarios</b>  <br><br>
