@@ -9,7 +9,7 @@ Seongmin Lee, KU: kyne0127@korea.ac.kr<br>
 Namseok Lee, KU: southstone0201@naver.com<br>
 
 ## Main Features
-#### 📘Guideline Generation Based on Similar Cases and Predefined Manuals
+### 📘Guideline Generation Based on Similar Cases and Predefined Manuals
 When a user provides key information such as their **current emergency situation, location, and injury severity**, **emerGen** follows a streamlined process to deliver **personalized emergency response guidelines**:
 
 1. Searches a **vector database** for similar **past emergency cases** or relevant **manuals**
@@ -17,13 +17,13 @@ When a user provides key information such as their **current emergency situation
 3. Uses a **lightweight on-device LLM** to generate a **customized emergency guideline** tailored to the situation
 🔹 By leveraging a vector DB, the system delivers accurate information without requiring additional model training, enabling fast and practical responses.
 
-#### 💬Q&A service based on Qwen2.5 model
+### 💬Q&A service based on Qwen2.5 model
 Users can chat directly with the LLM to ask questions and receive real-time, situation-specific answers related to their emergency.
 
-#### 🔎Keyword-Based Search of Past Cases
+### 🔎Keyword-Based Search of Past Cases
 Users can simply enter keywords to search past emergency response cases and manuals stored in the vector database.
 
-#### 💡Efficient and Practical On-Device Architecture
+### 💡Efficient and Practical On-Device Architecture
 -The system operates as a vector DB–driven on-device application, allowing it to function independently without relying on cloud infrastructure.
 
 -Equipped with a small, efficient LLM, it runs smoothly even in environments with limited computing resources.
@@ -75,7 +75,6 @@ Users can simply enter keywords to search past emergency response cases and manu
 ### Setup `python` environment
 ```bash
 conda create --name streamlit python=3.10
-conda activate streamlit
 ```
 ```bash
 pip install streamlit
@@ -93,6 +92,9 @@ pip install pandas
 ```
 
 ## Run Server
+```bash
+conda activate streamlit
+```
 ```bash
 streamlit run main.py
 ```
