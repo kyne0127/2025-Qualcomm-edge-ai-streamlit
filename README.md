@@ -38,25 +38,6 @@ Users can simply enter keywords to search past emergency response cases and manu
 5.
 6.
 
-## Install
-### Setup `python` environment
-```bash
-pip install accelerate datasets
-pip install -i https://pypi.org/simple/ bitsandbytes
-pip install transformers[torch] -U
-pip install langchain langchain_community langchain_huggingface
-pip install PyMuPDF faiss-gpu
-pip install sentence-transformers peft opencv-python
-pip install kiwipiepy konlpy langchain-teddynote
-pip install django
-```
-
-## Run Server
-```bash
-
-```
-ex) Out of the box when you enter localhost:3000
-
 ## Repository Structure
 ``` bash
 .
@@ -87,3 +68,25 @@ ex) Out of the box when you enter localhost:3000
 ### util
 └── utils.py
 ```
+
+## Install
+### Setup `python` environment
+```bash
+pip install accelerate datasets
+pip install -i https://pypi.org/simple/ bitsandbytes
+pip install transformers[torch] -U
+pip install langchain langchain_community langchain_huggingface
+pip install PyMuPDF faiss-gpu
+pip install sentence-transformers peft opencv-python
+pip install kiwipiepy konlpy langchain-teddynote
+pip install django
+```
+
+## Run Server
+```bash
+
+```
+ex) Out of the box when you enter localhost:3000
+
+
+
