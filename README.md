@@ -31,14 +31,13 @@ Users can simply enter keywords to search past emergency response cases and manu
 -Since all information retrieval is handled via the vector DB, no additional model fine-tuning is needed — new data or categories can be added directly to the DB, making the system easy to maintain, cost-effective, and highly practical for real-world use.
  
 ## Overall Pipeline of emerGen
-"우리 이미지 넣어야함" 
+
 <b>Step-by-step usage scenarios</b>  <br><br>
-1.
-2.
-3.
-4.
-5.
-6.
+
+1.	Relevant data is pre-organized and embedded into a vector database, categorized by emergency type, task, and context.
+2.	When using the app, the user selects a category, defines a task, and enters a specific question related to the emergency situation.
+3.	The system retrieves the most relevant information from the vector database based on the user’s input.
+4.	The on-device LLM receives the retrieved context, the user’s question, and the task type, and generates a customized output tailored to the situation, which is then presented to the user.
 
 ## Repository Structure
 ``` bash
