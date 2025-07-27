@@ -3,6 +3,7 @@ import time
 from utils import image_to_base64
 from db.retrieve import retrieve, process_output
 from streamlit_option_menu import option_menu
+import re
 
 st.set_page_config(page_title="case_search", layout="centered")
 
@@ -146,7 +147,8 @@ if keyword:
         st.warning("키워드를 입력해주세요.")
     with st.spinner(f"'{keyword}'에 대한 사례를 vector db에서 검색 중입니다."):
         index = selected + "_" + "사례"
-        results = process_output(index, keyword, "caseSearch")
+        output = process_output(index, keyword, "caseSearch")
+        results= re.findall(r"<case>(.*?)</case>", output, re.DOTALL)
     st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
     for result in results:
         st.markdown(f"""
@@ -155,7 +157,7 @@ if keyword:
                             <div style="color:#ff762d; font-weight:600; font-size:22px; letter-spacing:-0.2px; margin-bottom:-2px;">{selected}</div>
                             <img src="data:image/svg+xml;base64,{paper_img}" style="width:20px; margin-left:5px;"/>
                         </div>
-                        <div>{result.page_content}</div>
+                        <div>{result}</div>
                     </div>
                     """, unsafe_allow_html=True)
     

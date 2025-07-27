@@ -43,7 +43,7 @@ if "messages" not in st.session_state:
     st.session_state.is_loading = False
     st.session_state.initial = True
 
-category_list = ['선택 안함', '구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
+category_list = ['선택 안함', '구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
 
 for message in st.session_state.messages:
     if not message['isUser']:
@@ -115,6 +115,13 @@ for message in st.session_state.messages:
                                                                     - 산 등산 중 길을 아예 잃었을 떄는 뭐부터 해야돼?\n
                                                                     - 저체온증을 막으려면 어떻게 해야될까?\n
                                                                     - 야생 곰을 만났을 때는 어떻게 하는게 가장 안전해?""", 'isUser': False})
+                    
+                elif selected == '일반 응급':
+                    st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
+                                                                    [예시 질문]\n
+                                                                    - 가정용 칼에 손이 절단됐을 경우 어떻게 해여돼?\n
+                                                                    - 음식을 잘못 먹어 음식 알레르기 증상이 나타날 경우 뭐부터 해야될까?\n
+                                                                    - 푹염에 몸이 안좋은데 어떻게 대처해야해?""", 'isUser': False})
                 st.session_state.initial = False
                 
     else: 

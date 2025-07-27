@@ -66,9 +66,11 @@ def get_guide_line_output(context, input_data):
 def get_case_search_output(context, input_data):
     prompt = f"""
     아래 context에 있는 사례들 중 keyword와 관련 있는 사례들을 뽑아서, 사례를 정리해줘. 각 사례들은 <case> </case> 안에 넣어서 사례끼리 분류해줘. 
-    답변은 500자 이내로 간단하게 생성해줘.
+    답변은 500자 이내로 간단하게 생성해주고, 필요하면 사례에 말을 더 붙여서 깔끔하게 설명을 만들어줘.
     Context: {context}
     Keyword: {input_data}
+    
+    답변은 무조건 한국어로 해줘.
     """
     
     response = get_LLM_output(prompt)
