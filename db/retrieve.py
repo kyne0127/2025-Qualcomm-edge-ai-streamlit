@@ -6,6 +6,8 @@ from db.create_db import process_pdfs_from_dataframe, load_pdf_databases, save_p
 from db.model import get_QA_output, get_guide_line_output, get_case_search_output
 
 import warnings
+import unicodedata
+
 warnings.filterwarnings("ignore")
 
 ### DB ###
@@ -24,6 +26,25 @@ else:
 ### Inference ###
 def process_output(category, input_data, task):
     global pdf_databases
+    print(pdf_databases)
+    
+    # normalized_category = unicodedata.normalize("NFC", category)
+    # normalized_db = {unicodedata.normalize("NFC", k): v for k, v in pdf_databases.items()}
+
+    
+    # import unicodedata
+
+    # print("[사용자 입력 category]", category)
+    # print("[입력 bytes]", category.encode())
+    # print("[입력 NFC]", unicodedata.normalize("NFC", category).encode())
+    # print("[입력 NFD]", unicodedata.normalize("NFD", category).encode())
+
+    # for k in pdf_databases.keys():
+    #     print("\n[KEY] 원래:", k)
+    #     print("→ bytes:", k.encode())
+    #     print("→ NFC:", unicodedata.normalize("NFC", k).encode())
+    #     print("→ NFD:", unicodedata.normalize("NFD", k).encode())
+    #     print("→ matched NFC?", unicodedata.normalize("NFC", k) == unicodedata.normalize("NFC", category))
 
     # 해당 category에서 관련된 정보 가져옴
     retriever = pdf_databases[category]
