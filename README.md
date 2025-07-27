@@ -31,7 +31,7 @@ Users can simply enter keywords to search past emergency response cases and manu
 -Since all information retrieval is handled via the vector DB, no additional model fine-tuning is needed — new data or categories can be added directly to the DB, making the system easy to maintain, cost-effective, and highly practical for real-world use.
  
 ## Overall Pipeline of emerGen
-<img src="https://github.com/chaaenni/2025-Qualcomm-edge-ai-streamlit/blob/master/assets/pipeline.png" alt="Description of the image" width="100%" />
+<img src="https://github.com/chaaenni/2025-Qualcomm-edge-ai-streamlit/blob/master/assets/pipeline_no_background.png" alt="Description of the image" width="100%" />
 <b>Step-by-step usage scenarios</b>  <br><br>
 
 1.	Relevant data is pre-organized and embedded into a vector database, categorized by emergency type, task, and context.
