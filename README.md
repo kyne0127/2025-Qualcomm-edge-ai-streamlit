@@ -5,8 +5,8 @@
 ## Team UNIDs
 Chaeyeon Jang, POSTECH: jcy2749@postech.ac.kr<br>
 Taehwan Kim, SKKU: dmsdl5030@g.skku.edu<br>
-Seongmin Lee, KU: kyne0127@korea.ac.kr<br>
 Namseok Lee, KU: southstone0201@naver.com<br>
+Seongmin Lee, KU: kyne0127@korea.ac.kr<br>
 
 ## Main Features
 ### 📘Guideline Generation Based on Similar Cases and Predefined Manuals
@@ -77,6 +77,7 @@ Users can simply enter keywords to search past emergency response cases and manu
 conda create --name streamlit python=3.10
 ```
 ```bash
+pip install torch
 pip install streamlit
 pip install streamlit-audiorecorder
 pip install streamlit-option-menu 
@@ -89,6 +90,7 @@ pip install sentence-transformers peft opencv-python
 pip install kiwipiepy konlpy langchain-teddynote
 pip install numpy
 pip install pandas
+pip install tqdm
 ```
 
 ## Run Server

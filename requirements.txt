@@ -1,2 +1,23 @@
+torch
 streamlit
-streamlit-option-menu
+streamlit-audiorecorder
+streamlit-option-menu 
+accelerate 
+datasets
+--extra-index-url https://pypi.org/simple/
+bitsandbytes
+transformers[torch]
+langchain
+langchain_community
+langchain_huggingface
+PyMuPDF 
+faiss-gpu
+sentence-transformers 
+peft 
+opencv-python
+kiwipiepy 
+konlpy 
+langchain-teddynote
+numpy
+pandas
+tqdm
