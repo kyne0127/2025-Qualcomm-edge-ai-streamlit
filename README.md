@@ -33,18 +33,52 @@ Users can search for past emergecy cases retrieved from the vector DB by simply 
 
 ## Install
 ### Setup `python` environment
+```bash
+pip install accelerate datasets
+pip install -i https://pypi.org/simple/ bitsandbytes
+pip install transformers[torch] -U
+pip install langchain langchain_community langchain_huggingface
+pip install PyMuPDF faiss-gpu
+pip install sentence-transformers peft opencv-python
+pip install kiwipiepy konlpy langchain-teddynote
+pip install django
 ```
-```
-### Install other dependencies
-```
-```
+
 ## Run Server
+```bash
+
 ```
-```
-Out of the box when you enter localhost:3000
+ex) Out of the box when you enter localhost:3000
 
 ## Repository Structure
 ``` bash
+.
+├── README.md
+├── data/
+│   ├── 구조물 고립 사고_매뉴얼.docx
+│   ├── 구조물 고립 사고_사례.docx
+│   ├── ...
+│   ├── dial.json
+│   └── full_data.csv
+│   
+### db
+├── create_db.py
+├── extract.py
+├── model.py
+├── preprocess.py
+├── retrieve.py # vectordb query & model inference
+│
+### pages
+├── case_search.py
+├── chat.py
+├── dial.py
+├── guideline.py
+│
+### main
+├── main.py
+│
+### util
+└── utils.py
 ```
 
 # Implementation Details 
