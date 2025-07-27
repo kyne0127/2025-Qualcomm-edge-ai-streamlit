@@ -70,6 +70,13 @@ st.markdown("""
         width: 24px;
         height: 24px;
     }
+    
+    @media (max-width: 410px){
+        .nav-link{
+            width:165px;
+            margin: 6px 6px;
+        }
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -94,7 +101,7 @@ st.markdown("""
 
 #category selection
 
-options=['구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
+options=['구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
 
 selected = option_menu(
     menu_title=None,
@@ -147,7 +154,7 @@ if keyword:
         st.warning("키워드를 입력해주세요.")
     with st.spinner(f"'{keyword}'에 대한 사례를 vector db에서 검색 중입니다."):
         index = selected + "_" + "사례"
-        output = process_output(index, keyword, "caseSearch")
+        output = process_output(index, keyword, "caseSearch").replace('\n', '<br/>')
         results= re.findall(r"<case>(.*?)</case>", output, re.DOTALL)
     st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
     for result in results:

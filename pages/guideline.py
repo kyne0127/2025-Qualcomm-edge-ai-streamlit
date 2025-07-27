@@ -58,6 +58,13 @@ st.markdown("""
         justify-content: center;
         align-items: center;
     }
+    
+    @media (max-width: 410px){
+        .nav-link{
+            width:165px;
+            margin: 6px 6px;
+        }
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -71,7 +78,7 @@ st.markdown(f"""
             </div>
             """, unsafe_allow_html=True)
 
-options=['구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고']
+options=['구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
 
 selected = option_menu(
     menu_title=None,

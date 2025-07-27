@@ -25,7 +25,9 @@ Users can simply enter keywords to search past emergency response cases and manu
 
 #### 💡Efficient and Practical On-Device Architecture
 -The system operates as a vector DB–driven on-device application, allowing it to function independently without relying on cloud infrastructure.
+
 -Equipped with a small, efficient LLM, it runs smoothly even in environments with limited computing resources.
+
 -Since all information retrieval is handled via the vector DB, no additional model fine-tuning is needed — new data or categories can be added directly to the DB, making the system easy to maintain, cost-effective, and highly practical for real-world use.
  
 ## Overall Pipeline of emerGen
@@ -72,6 +74,13 @@ Users can simply enter keywords to search past emergency response cases and manu
 ## Install
 ### Setup `python` environment
 ```bash
+conda create --name streamlit python=3.10
+conda activate streamlit
+```
+```bash
+pip install streamlit
+pip install streamlit-audiorecorder
+pip install streamlit-option-menu 
 pip install accelerate datasets
 pip install -i https://pypi.org/simple/ bitsandbytes
 pip install transformers[torch] -U
@@ -79,14 +88,14 @@ pip install langchain langchain_community langchain_huggingface
 pip install PyMuPDF faiss-gpu
 pip install sentence-transformers peft opencv-python
 pip install kiwipiepy konlpy langchain-teddynote
-pip install django
+pip install numpy
+pip install pandas
 ```
 
 ## Run Server
 ```bash
-
+streamlit run main.py
 ```
-ex) Out of the box when you enter localhost:3000
 
 
 
