@@ -2,7 +2,7 @@ import streamlit as st
 from utils import image_to_base64
 import time
 from streamlit_option_menu import option_menu
-from db.retrieve import process_output
+# from db.retrieve import process_output
 
 st.set_page_config(page_title="guideline", layout="centered")
 
@@ -19,6 +19,7 @@ if "is_submit" not in st.session_state:
 # --- Image ---
 submit_img = image_to_base64("assets/send.svg")
 logo_img = image_to_base64("assets/logo.png")
+speak_img = image_to_base64("assets/speak_black.svg")
 
 # --- Style ---
 st.markdown("""
@@ -68,12 +69,25 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- category selection ---
 st.markdown(f"""
             <a href="/" target="_self" style="text-decoration:none;">
                 <img src="data:image/png;base64,{logo_img}" style="width:120px; margin-bottom:40px; margin-top:-3rem;"/>
             </a>
-            <div style="font-weight:bold; font-size:22px;">
+            """, unsafe_allow_html=True)
+
+st.markdown(f"""
+            <a href="/guideline_audio" target="_self" style="display:block; margin-bottom:25px; width:100%; padding: 14px 20px; font-weight:bold; font-size:16px; border-radius:20px; background-color:#fff1ea; border: 2px solid #ff762d; text-decoration: none; color:black;">
+                <div style="display:flex; justify-content:center; text-align:center;">
+                    <div>음성으로 상황 설명하기</div>
+                    <img src="data:image/svg+xml;base64,{speak_img}" style="height:22px; margin-left:6px;"/>
+                </div>
+            </a>
+            """, unsafe_allow_html=True)
+
+
+# --- category selection ---
+st.markdown(f"""
+            <div style="font-weight:bold; font-size:20px;">
                 카테고리
             </div>
             """, unsafe_allow_html=True)
@@ -86,6 +100,7 @@ selected = option_menu(
     # icons= ["triangle", "triangle", "triangle", "triangle"],
     icons= [""] * len(options),
     orientation="horizontal",
+    key="category_menu",
     styles={
         "container": {
             "padding": "0", 
@@ -154,7 +169,12 @@ if st.button("가이드라인 보기", use_container_width=True):
                 if injury: input+= f"특이사항: {injury}, "
                 
                 index = st.session_state.category + "_" + "메뉴얼"
-                output = process_output(index, input, "GuideLine")
+                # output = process_output(index, input, "GuideLine")
+                output = f"""
+                    ### ** 비상 가이드라인
+                    1. 대피
+                    2. 전화로 상황 알리기
+                """
                 chunks = [c for c in output.split('\n') if c.strip()]
                 st.session_state.guidelines = chunks
             except Exception as e:
