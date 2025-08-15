@@ -20,6 +20,8 @@ if "is_submit" not in st.session_state:
 submit_img = image_to_base64("assets/send.svg")
 logo_img = image_to_base64("assets/logo.png")
 speak_img = image_to_base64("assets/speak_black.svg")
+play_img = image_to_base64("assets/play.svg")
+sound_img = image_to_base64("assets/sound_wave.svg")
 
 # --- Style ---
 st.markdown("""
@@ -76,10 +78,12 @@ st.markdown(f"""
             """, unsafe_allow_html=True)
 
 st.markdown(f"""
-            <a href="/guideline_audio" target="_self" style="display:block; margin-bottom:25px; width:100%; padding: 14px 20px; font-weight:bold; font-size:16px; border-radius:20px; background-color:#fff1ea; border: 2px solid #ff762d; text-decoration: none; color:black;">
-                <div style="display:flex; justify-content:center; text-align:center;">
+            <a href="/guideline_audio" target="_self" style="display:block; margin-bottom:25px; width:100%; padding: 14px 20px; font-weight:bold; font-size:16px; border-radius:100px; background-color:#fff1ea; text-decoration: none; color:black;">
+                <div style="display:flex; justify-content:center; text-align:center; align-items:center;">
+                    <img src="data:image/svg+xml;base64,{sound_img}" style="height:30px; margin-right:10px;"/>
                     <div>음성으로 상황 설명하기</div>
-                    <img src="data:image/svg+xml;base64,{speak_img}" style="height:22px; margin-left:6px;"/>
+                    <img src="data:image/svg+xml;base64,{sound_img}" style="height:30px; margin-left:10px;"/>
+                    <img src="data:image/svg+xml;base64,{play_img}" style="height:22px; margin-left:4px;"/>
                 </div>
             </a>
             """, unsafe_allow_html=True)
@@ -92,7 +96,7 @@ st.markdown(f"""
             </div>
             """, unsafe_allow_html=True)
 
-options=['구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
+options=['선택 안함', '구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
 
 selected = option_menu(
     menu_title=None,
@@ -152,7 +156,6 @@ st.markdown(f"""
             </div>
             """, unsafe_allow_html=True)
 injury = st.text_area(" ", placeholder="예) 휠체어 이용자가 있음, 다리 부상이 심함", height=120)
-
 # if button is pressed
 if st.button("가이드라인 보기", use_container_width=True):
     if not situation.strip():
@@ -185,7 +188,7 @@ if st.button("가이드라인 보기", use_container_width=True):
 # 출력
 if st.session_state.is_submit:
     st.markdown(f"""
-            <div style="font-weight:bold; font-size:20px; color:#ff762d ;">
+            <div style="font-weight:bold; font-size:20px; color:#ff762d; margin-top:20px;">
                가이드라인
             </div>
             """, unsafe_allow_html=True)

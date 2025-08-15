@@ -3,6 +3,12 @@ import time
 from utils import image_to_base64
 from streamlit_option_menu import option_menu
 from db.retrieve import process_output
+from streamlit_mic_recorder import mic_recorder
+import whisper
+from io import BytesIO
+from pydub import AudioSegment
+import numpy as np
+import librosa
 
 st.set_page_config(page_title="chat", layout="centered")
 
@@ -12,7 +18,16 @@ agent_img = image_to_base64("assets/agent_orange.svg")
 sound_img = image_to_base64("assets/sound_wave.svg")
 
 
+# --- load whisper model ---
+@st.cache_resource
+def load_model():
+    return whisper.load_model("small")
+
+model = load_model()
+print("model loaded successfully")
+
 st.markdown("""<style>
+            
             
             body { background: white; }
             .agent{
@@ -35,9 +50,6 @@ st.markdown(f"""
             <div style="display:flex; align-items:center;">
                 <a href="/" target="_self" style="text-decoration:none;">
                     <img src="data:image/png;base64,{logo_img}" style="width:120px; margin-bottom:10px; margin-top:-3rem;"/>
-                </a>
-                <a href="/chat_audio" target="_self" style="display:flex; margin-left:auto; width:50px; height:50px; border-radius:100px; background-color:#eff2f6; justify-content:center; align-items:center;">
-                    <img src="data:image/svg+xml;base64,{sound_img}" style="width:30px;"/>
                 </a>
             </div>
             """, unsafe_allow_html=True)
@@ -148,11 +160,37 @@ st.markdown(f"""
             </div>
             """, unsafe_allow_html=True)
 
-user_input = st.chat_input("메시지를 입력하세요...")
+# user_input = st.chat_input("메시지를 입력하세요...")
+user_input = mic_recorder(
+    start_prompt="클릭하여 녹음 시작",
+    stop_prompt="⏹ 녹음 종료",
+    use_container_width=True,
+    key="recorder",
+    format="wav"
+)
 
 # ---print user input and agent output    
 if user_input:#if submitted and user_input.strip():
-    st.session_state.messages.append({'text': user_input.strip(), 'isUser': True})
+    audio_bytes = BytesIO(user_input["bytes"])
+    audio_bytes.seek(0)
+    
+    # aud_array = np.frombuffer(audio_bytes, np.int16).flatten().astype(np.float32) / 32768.0
+    seg = AudioSegment.from_file(audio_bytes, format="wav")
+    samples = np.array(seg.get_array_of_samples())
+    if seg.channels > 1:
+        samples = samples.reshape((-1, seg.channels)).mean(axis=1)
+    
+    max_int = float(1 << (8 * seg.sample_width - 1))
+    samples = (samples / max_int).astype(np.float32)
+    
+    sr = seg.frame_rate
+    if sr != 16000:
+        samples = librosa.resample(samples, orig_sr=sr, target_sr=16000)
+    
+    
+    result = model.transcribe(samples)
+    
+    st.session_state.messages.append({'text': result["text"].strip(), 'isUser': True})
     st.rerun()  # 유저 메시지 바로 표시
 
 # ---response processed and printed
