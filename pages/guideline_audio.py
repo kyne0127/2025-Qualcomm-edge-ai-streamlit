@@ -8,6 +8,7 @@ from streamlit_mic_recorder import mic_recorder
 import numpy as np
 from pydub import AudioSegment
 import librosa
+from db.retrieve import process_output
 
 st.set_page_config(page_title="audio guideline", layout="centered")
 
@@ -187,13 +188,30 @@ if audio:
         samples = librosa.resample(samples, orig_sr=sr, target_sr=16000)
     
     
-    output = model.transcribe(samples)
-    st.write(output["text"])
+    result = model.transcribe(samples)
+    st.write(result["text"])
     
     submitted = st.button("가이드라인 보기", use_container_width= True)
     
     if submitted:
-        st.write("가이드라인")
+        if not result.strip():
+            st.warning("음성으로 상황 설명을 해주세요.")
+        else:    
+            st.session_state.is_loading = True
+            st.session_state.is_submit = True
+            
+            with st.spinner("가이드라인 생성 중..."):
+                try:
+                    index = st.session_state.category + "_" + "메뉴얼"
+                    output = process_output(index, result, "Guideline")
+                    chunks = [c for c in output.split("\n") if c.strip()]
+                    st.session_state.guidelines = chunks
+                except Exception as e:
+                    st.session_state.guidelines = ["❌ 오류가 발생했습니다."]
+                finally:
+                    st.session_state.is_loading = False
+                    
+        
         
         
 # --- page transfer ---
