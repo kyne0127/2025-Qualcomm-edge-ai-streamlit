@@ -173,11 +173,17 @@ user_input = mic_recorder(
     format="wav"
 )
 
-st.session_state.submit_audio = user_input
+if user_input:
+    cur_id = hashlib.md5(user_input["bytes"]).hexdigest()
+    if cur_id != st.session_state.last_audio_id:
+        st.session_state.last_audio_id = cur_id
+        st.session_state.submit_audio = user_input["bytes"]
+        st.session_state.recorder_seq += 1
+        st.rerun()
 
 # ---print user input and agent output    
-if st.session_state.submit_audio:
-    audio_bytes = BytesIO(user_input["bytes"])
+if st.session_state.submit_audio is not None:
+    audio_bytes = BytesIO(st.session_state.submit_audio)
     audio_bytes.seek(0)
     
     # aud_array = np.frombuffer(audio_bytes, np.int16).flatten().astype(np.float32) / 32768.0
@@ -198,7 +204,6 @@ if st.session_state.submit_audio:
     
     st.session_state.messages.append({'text': result["text"].strip(), 'isUser': True})
     st.session_state.submit_audio = None
-    st.session_state["recorder"] = None
     st.rerun()  # 유저 메시지 바로 표시
 
 # ---response processed and printed
