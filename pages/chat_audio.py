@@ -9,6 +9,7 @@ from io import BytesIO
 from pydub import AudioSegment
 import numpy as np
 import librosa
+import hashlib
 
 st.set_page_config(page_title="chat", layout="centered")
 
@@ -60,6 +61,9 @@ if "messages" not in st.session_state:
     st.session_state.input = ""
     st.session_state.is_loading = False
     st.session_state.initial = True
+    st.session_state.submit_audio = None
+    st.session_state.last_audio_id = None
+    st.session_state.recorder_seq = 0
 
 category_list = ['선택 안함', '구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
 
@@ -165,12 +169,14 @@ user_input = mic_recorder(
     start_prompt="클릭하여 녹음 시작",
     stop_prompt="⏹ 녹음 종료",
     use_container_width=True,
-    key="recorder",
+    key=f"recorder_{st.session_state.recorder_seq}",
     format="wav"
 )
 
+st.session_state.submit_audio = user_input
+
 # ---print user input and agent output    
-if user_input:#if submitted and user_input.strip():
+if st.session_state.submit_audio:
     audio_bytes = BytesIO(user_input["bytes"])
     audio_bytes.seek(0)
     
@@ -191,6 +197,8 @@ if user_input:#if submitted and user_input.strip():
     result = model.transcribe(samples)
     
     st.session_state.messages.append({'text': result["text"].strip(), 'isUser': True})
+    st.session_state.submit_audio = None
+    st.session_state["recorder"] = None
     st.rerun()  # 유저 메시지 바로 표시
 
 # ---response processed and printed
