@@ -2,7 +2,7 @@ import streamlit as st
 from utils import image_to_base64
 import time
 from streamlit_option_menu import option_menu
-# from db.retrieve import process_output
+from db.retrieve import process_output
 
 st.set_page_config(page_title="guideline", layout="centered")
 
@@ -172,12 +172,12 @@ if st.button("가이드라인 보기", use_container_width=True):
                 if injury: input+= f"특이사항: {injury}, "
                 
                 index = st.session_state.category + "_" + "메뉴얼"
-                # output = process_output(index, input, "GuideLine")
-                output = f"""
-                    ### ** 비상 가이드라인
-                    1. 대피
-                    2. 전화로 상황 알리기
-                """
+                output = process_output(index, input, "GuideLine")
+                # output = f"""
+                #     ### ** 비상 가이드라인
+                #     1. 대피
+                #     2. 전화로 상황 알리기
+                # """
                 chunks = [c for c in output.split('\n') if c.strip()]
                 st.session_state.guidelines = chunks
             except Exception as e:
