@@ -51,16 +51,7 @@ def process_output(category, input_data, task):
     context = retriever.invoke(input_data)
     print(context)
     # QA 모델에 입력후 출력
-    if task == 'QA':
-        response = get_QA_output(context, input_data)
-    elif task == 'GuideLine':
-        response = get_guide_line_output(context, input_data)
-    elif task == "caseSearch":
-        response = get_case_search_output(context, input_data)
-    else:
-        raise ValueError("Invalid task. Choose either 'QA' or 'GuideLine'.")
-    print('Answer:', response)
-
+    response = get_LLM_output(task, context, input_data)
     return response
 
 def retrieve(category, input_data):
