@@ -1,107 +1,65 @@
-import re
+# eval_one_qwen.py
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
-model_name = "beomi/Llama-3-Open-Ko-8B-Instruct-preview" #"Qwen/Qwen2.5-7B-Instruct"
+def get_LLM_output(task, context, user_input):
+    model_name = "hwan99/llama3ko-8b-qualcomm-lora_merged"
+    
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        
+    if task == "GuideLine":
+        system_prompt = "[TASK=GUIDELINE]\n지금은 비상 재난 상황이야. 아래 user가 제공한 상황(question)에 대해, context를 참고하여 가이드라인을 생성해줘. 답변은 500자 이내로 작성해줘.\n\n(숫자 뒤에는 간결한 문장. 불필요한 설명·서론 금지)"
+    elif task == "QA":
+        system_prompt = "[TASK=QA]\n지금은 비상 재난 상황이야. 아래 user가 제공한 상황(question)에 대해, Context에 근거해 사실만 답해줘. 답변은 한 문장, 150자 이내로 간결히 작성해줘. (추정·불필요한 서론 금지, 단위/수치 그대로 유지)"
+    elif task == "caseSearch":
+        # caseSearch는 fine-tuning 안함
+        model_name = "beomi/Llama-3-Open-Ko-8B-Instruct-preview"
+        system_prompt = "친절한 챗봇으로서 상대방의 요청에 최대한 자세하고 친절하게 답하자. 모든 대답은 한국어(Korean)으로 대답해줘."
+    else: 
+        raise ValueError("Invalid task. Choose either 'QA' or 'GuideLine' or 'caseSearch'")
+    
+    if context == None: 
+        model_name = "beomi/Llama-3-Open-Ko-8B-Instruct-preview"
+        # 사용자 질문에 대해 무조건 vectorDB에 존재하는게 아님 
+        # 이때, 어떻게 처리할 지 생각해야함 -> 유사도가 낮을 때, 현재 DB에는 없는 정보지만, 이런식으로 생각한다 같이 처리? 
+        pass 
 
-model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    torch_dtype="auto",
-    device_map="auto"
-)
-model.eval()
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-
-def get_LLM_output(prompt):
-    # global model, tokenizer
-
+    model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            device_map="auto",
+            torch_dtype=torch.bfloat16,
+        )
+    model.eval()
+    tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+    
+    user_prompt = f"Context: {context}\nInput: {user_input}"
     messages = [
-        {"role": "system", "content": "친절한 챗봇으로서 상대방의 요청에 최대한 자세하고 친절하게 답하자. 모든 대답은 한국어(Korean)으로 대답해줘."},
-        {"role": "user", "content": prompt}
-    ]
-    
-    input_ids = tokenizer.apply_chat_template(
-        messages,
-        add_generation_prompt=True,
-        return_tensors="pt"
-    ).to(model.device)
+        {"role": "system", "content": system_prompt}, 
+        {"role": "user", "content": user_prompt}]
 
-    terminators = [
-        tokenizer.eos_token_id,
-        tokenizer.convert_tokens_to_ids("<|eot_id|>")
-    ]
-
-    outputs = model.generate(
-        input_ids,
-        max_new_tokens=512,
-        eos_token_id=terminators,
-        do_sample=True,
-        temperature=1,
-        top_p=0.9,
+    prompt = tokenizer.apply_chat_template(
+        messages, tokenize=False, add_generation_prompt=True
     )
-    response = outputs[0][input_ids.shape[-1]:]
-    response = tokenizer.decode(response, skip_special_tokens=True)
-    print(response)
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+
+    with torch.inference_mode():
+        eot_id = tokenizer.convert_tokens_to_ids("<|eot_id|>")
+        eos_id = tokenizer.eos_token_id
+
+        gen_ids = model.generate(
+            **inputs,
+            max_new_tokens=220,
+            do_sample=False,
+            temperature=0.0,
+            top_p=1.0,
+            eos_token_id=[eos_id, eot_id],  
+            pad_token_id=tokenizer.eos_token_id,
+        )
+    prompt_len = inputs["input_ids"].shape[-1]
+    out_text = tokenizer.decode(gen_ids[0][prompt_len:], skip_special_tokens=True).strip()
+    if task == "GUIDELINE":
+        out_text = out_text.split("\n")[:-1]
+        out_text = "\n".join(out_text).strip()
     
-    return response
-    
-    ##qwen2.5
-    # text = tokenizer.apply_chat_template(
-    #     messages,
-    #     tokenize=False,
-    #     add_generation_prompt=True
-    # )
-    # model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
-    
-    # generated_ids = model.generate(
-    #     **model_inputs,
-    #     max_new_tokens=512
-    # )
-    # generated_ids = [
-    #     output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
-    # ]
-    # response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
-    # return response
-
-
-
-def get_QA_output(context, input_data):
-    prompt = f"""
-    지금은 비상 재난 상황이야. 아래 question에 있는 상황에 대해서, context를 참고하여 답변을 생성해줘.
-    Context: {context}
-    Question: {input_data}
-    답변은 500자 이내로 간단하게 생성해줘.
-    """
-
-    response = get_LLM_output(prompt)
-    return response
-
-
-def get_guide_line_output(context, input_data):
-    prompt = f"""    
-    지금은 비상 재난 상황이야. 아래 question에 있는 상황에 대해서, context를 참고하여 가이드라인을 생성해줘.
-    Context: {context}
-    Input: {input_data}
-    답변은 500자 이내로 간단하게 생성해줘.
-    """
-
-    response = get_LLM_output(prompt)
-    return response
-
-def get_case_search_output(context, input_data):
-    prompt = f"""
-    아래 context에 있는 사례들 중 keyword와 관련 있는 사례들을 뽑아서, 사례를 정리해줘. 각 사례들은 <case> </case> 안에 넣어서 사례끼리 분류해줘. 
-    필요하면 <case> </case> 안에 있는 사례에 말을 더 붙여서 좀 더 사례 설명을 길게 만들어줘. 각 사례에 대한 설명은 500자 이내로 해줘.
-    Context: {context}
-    Keyword: {input_data}
-    
-    답변은 무조건 한국어로 해줘.
-    """
-    
-    response = get_LLM_output(prompt)
-    return response
-
-
-
-
+    return out_text
