@@ -46,9 +46,10 @@ st.markdown("""
 # --- load model ---
 @st.cache_resource
 def load_model():
-    return whisper.load_model("small")
+    return whisper.load_model("small", device='cpu')
 
 model = load_model()
+print(model.device)
 print("model loaded successfully")
 
 if "category" not in st.session_state:
@@ -215,7 +216,7 @@ if st.session_state.is_clicked:
         
         with st.spinner("가이드라인 생성 중..."):
             try:
-                index = st.session_state.category + "_" + "메뉴얼"
+                index = st.session_state.category + "_" + "매뉴얼"
                 output = process_output(index, st.session_state.stt_result, "GuideLine")
                 # output = f"""
                 #     ### ** 비상 가이드라인

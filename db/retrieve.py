@@ -3,7 +3,8 @@ import pandas as pd
 from tqdm import tqdm
 
 from db.create_db import process_pdfs_from_dataframe, load_pdf_databases, save_pdf_databases
-from db.model import get_QA_output, get_guide_line_output, get_case_search_output
+# from db.model import get_QA_output, get_guide_line_output, get_case_search_output
+from db.model import get_LLM_output
 
 import warnings
 import unicodedata
