@@ -11,7 +11,7 @@ from db.preprocess import process_pdf
 
 embeddings = HuggingFaceEmbeddings(
     model_name="intfloat/multilingual-e5-base",
-    model_kwargs={'device': 'cuda'},
+    model_kwargs={'device': 'cpu'},
     encode_kwargs={'normalize_embeddings': True}
 )
 
