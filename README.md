@@ -194,23 +194,23 @@ python db/create_db.py
 ```
 ⚠️ If you encounter an import error when running the command above,
 <details>
-  <summary>follow these steps:</summary>
+    <summary>follow these steps:</summary>
     1. Move to the db directory:
-      ```bash
-      cd db
-      ```
+        ```bash
+        cd db
+        ```
     2. Open create_db.py and update the import statements:
 
-      - Change from db.preprocess import process_pdf to from preprocess import process_pdf
+        - Change from db.preprocess import process_pdf to from preprocess import process_pdf
 
     3. Open preprocess.py and update the import statements:
 
-      - Change from db.extract import daconCustomExtractor to from extract import daconCustomExtractor
+        - Change from db.extract import daconCustomExtractor to from extract import daconCustomExtractor
 
     4. Run the script:
-      ```bash
-      python create_db.py
-      ```
+        ```bash
+        python create_db.py
+        ```
     5. After successful execution, revert the modified import statements to their original form.
 </details>
 
