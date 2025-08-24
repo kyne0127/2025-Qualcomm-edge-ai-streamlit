@@ -8,17 +8,17 @@ Taehwan Kim, SKKU: dmsdl5030@g.skku.edu<br>
 Namseok Lee, KU: southstone0201@naver.com<br>
 Seongmin Lee, KU: kyne0127@korea.ac.kr<br>
 
-## Main Features
-### 📘Guideline Generation Based on Similar Cases and Predefined Manuals
+## Main Application Functionality
+### 📘Guideline Generation Based on Predefined Manuals in VectorDB
 When a user provides key information such as their **current emergency situation, location, and injury severity**, **emerGen** follows a streamlined process to deliver **personalized emergency response guidelines**:
 
 1. Searches a **vector database** for similar **past emergency cases** or relevant **manuals**
-2. Combines the retrieved data with the user’s input
-3. Uses a **lightweight on-device LLM** to generate a **customized emergency guideline** tailored to the situation
+2. Combines the retrieved data with the user’s input(text/audio). Audio input is also supported by the Whisper-Base-En speech-to-text model.
+3. Uses a **lightweight, finetuned on-device LLM** to generate a **customized emergency guideline** tailored to the situation
 🔹 By leveraging a vector DB, the system delivers accurate information without requiring additional model training, enabling fast and practical responses.
 
-### 💬Q&A service based on Qwen2.5 model
-Users can chat directly with the LLM to ask questions and receive real-time, situation-specific answers related to their emergency.
+### 💬Q&A service based on Finetuned Llama-3.2-3B-Instruct and Whisper-Base-En
+Users can chat directly with the LLM to ask questions and receive real-time, situation-specific answers related to their emergency. Chat service also supports audio input via the Whisper-Base-En model for speech-to-text transcription.
 
 ### 🔎Keyword-Based Search of Past Cases
 Users can simply enter keywords to search past emergency response cases and manuals stored in the vector database.
@@ -36,8 +36,9 @@ Users can simply enter keywords to search past emergency response cases and manu
 
 1.	Relevant data is pre-organized and embedded into a vector database, categorized by emergency type, task, and context.
 2.	When using the app, the user selects a category, defines a task, and enters a specific question related to the emergency situation.
-3.	The system retrieves the most relevant information from the vector database based on the user’s input.
-4.	The on-device LLM receives the retrieved context, the user’s question, and the task type, and generates a customized output tailored to the situation, which is then presented to the user.
+3.  If the user provides audio input, it is automatically transcribed into text using the Whisper-Base-En model.
+4.	The system retrieves the most relevant information from the vector database based on the user’s input.
+5.	The on-device LLM receives the retrieved context, the user’s question, and the task type, and generates a customized output tailored to the situation, which is then presented to the user.
 
 ## Repository Structure
 ``` bash
@@ -70,27 +71,117 @@ Users can simply enter keywords to search past emergency response cases and manu
 └── utils.py
 ```
 
-## Install
-### Setup `python` environment
+## Installation
+### Setup QAIRT SDK Environment
+**1. Install QAIRT SDK from the link below**
+[QAIRT SDK installation link](https://www.qualcomm.com/developer/software/qualcomm-ai-engine-direct-sdk)
+
+**2. Set QAIRT SDK Environment**
+Set up the QAIRT SDK by following the official setup guide for your operating system::
+[Windows Setup Guide](https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-50/windows_setup.html?product=1601111740009302)
+[Linux Setup Guide](https://docs.qualcomm.com/bundle/publicresource/topics/80-70017-15B/qairt-setup.html)
+⚠️ Make sure to select the guide that matches your OS.
+
+**3. Install qai-hub and Llama Model**
+```bash
+pip install qai-hub
+```
+```bash
+pip install -U "qai-hub-models[llama-v3-2-3b-instruct]"
+```
+```bash
+qai-hub configure --api_token [API_TOKEN] #replace [API_TOKEN] by personal API token given by qai hub
+```
+
+**4. Export Llama-v3.2-3B-Instruct into Genie Compatible QNN Binaries**
+```bash
+mkdir -p genie_bundle
+```
+```bash
+pip install torch==2.4.0
+```
+```bash
+python -m qai_hub_models.models.llama_v3_2_3b_instruct.export --chipset qualcomm-snapdragon-x-elite --skip-inferencing --skip-profiling --output-dir genie_bundle
+```
+
+**5. Run Genie On-Device via genie-t2t-run**
+collect additionally required files by following steps below:
+<details>
+    <summary>prepare Genie configs</summary>
+    - download tokenizer.json from [official huggingface](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct/blob/main/tokenizer.json)
+    - get genie_config.json
+        ```bash
+        git clone https://github.com/quic/ai-hub-apps.git
+        ```
+        ```bash
+        cp ai-hub-apps/tutorials/llm_on_genie/configs/genie/llama_v3_8b_instruct.json genie_bundle/genie_config.json
+        ```
+    - get htp configuration file
+        ```bash
+        cp ai-hub-apps/tutorials/llm_on_genie/configs/htp/htp_backend_ext_config.json.template genie_bundle/htp_backend_ext_config.json
+        ```
+    - when finished with the above steps, your bundle should look like this:
+        ```bash
+        genie_bundle/
+        genie_config.json
+        htp_backend_ext_config.json
+        tokenizer.json
+        <model_id>_part_1_of_N.bin
+        ...
+        <model_id>_part_N_of_N.bin
+        ```
+    - copy Genie's shared libraries and executable to our bundle
+        ```bash
+        cp $QNN_SDK_ROOT/lib/hexagon-v73/unsigned/* genie_bundle
+        cp $QNN_SDK_ROOT/lib/aarch64-windows-msvc/* genie_bundle
+        cp $QNN_SDK_ROOT/bin/aarch64-windows-msvc/genie-t2t-run.exe genie_bundle
+        ```
+</details>
+
+```bash
+./genie-t2t-run.exe -c genie_config.json -p "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nWhat is France's capital?<|eot_id|><|start_header_id|>assistant<|end_header_id|>"
+```
+
+### Setup Streamlit Environment
+**1. Clone the repository and navigate to the project directory**
+```bash
+git clone https://github.com/chaaenni/2025-Qualcomm-edge-ai-streamlit.git
+```
+```bash
+cd 2025-Qualcomm-edge-ai-streamlit
+```
+
+**2. Create a virtual environment and install required dependencies**
 ```bash
 conda create --name streamlit python=3.10
 ```
 ```bash
-pip install torch
-pip install streamlit
-pip install streamlit-audiorecorder
-pip install streamlit-option-menu 
-pip install accelerate datasets
-pip install -i https://pypi.org/simple/ bitsandbytes
-pip install transformers[torch] -U
-pip install langchain langchain_community langchain_huggingface
-pip install PyMuPDF faiss-gpu
-pip install sentence-transformers peft opencv-python
-pip install kiwipiepy konlpy langchain-teddynote
-pip install numpy
-pip install pandas
-pip install tqdm
+pip install -r requirements.txt
 ```
+
+**3. Copy the genie_bundle directory generated in the "Setup QAIRT SDK environment" step into the current directory**
+```bash
+cp [path_to_your_QAIRT_SDK]/[your_QAIRT_SDK_version]/bin/genie_bundle ./genie_bundle
+```
+
+### Generate Database Pickle File
+```bash
+python db/create_db.py
+```
+- ⚠️ If you encounter an import error when running the command above, follow these steps:
+    1. Move to the db directory:
+        ```bash
+        cd db
+        ```
+    2. Open create_db.py and update the import statements:
+        - Change from db.preprocess import process_pdf to from preprocess import process_pdf
+    3. Open preprocess.py and update the import statements:
+        - Change from db.extract import daconCustomExtractor to from extract import daconCustomExtractor
+    4. Run the script:
+        ```bash
+        python create_db.py
+        ```
+    5. After successful execution, revert the modified import statements to their original form.
 
 ## Run Server
 ```bash
