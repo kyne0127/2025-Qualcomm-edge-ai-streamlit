@@ -44,6 +44,8 @@ Users can simply enter keywords to search past emergency response cases and manu
 ``` bash
 .
 ├── README.md
+├── requirements.txt
+### necessary data
 ├── data/
 │   ├── 구조물 고립 사고_매뉴얼.docx
 │   ├── 구조물 고립 사고_사례.docx
@@ -61,8 +63,9 @@ Users can simply enter keywords to search past emergency response cases and manu
 ### pages
 ├── case_search.py
 ├── chat.py
+├── ...
 ├── dial.py
-├── guideline.py
+├── guideline_audio.py
 │
 ### main
 ├── main.py
@@ -204,7 +207,7 @@ python db/create_db.py
     ```
 5. After successful execution, revert the modified import statements to their original form.
 
-
+<br/>
 
 ## Run Server
 ```bash
