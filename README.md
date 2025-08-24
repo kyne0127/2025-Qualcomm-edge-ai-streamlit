@@ -72,14 +72,19 @@ Users can simply enter keywords to search past emergency response cases and manu
 ```
 
 ## Installation
-### Setup QAIRT SDK Environment
-**1. Install QAIRT SDK from the link below**
+### 1️⃣Setup QAIRT SDK Environment
+**1. Install QAIRT SDK from the link below:**
+
 [QAIRT SDK installation link](https://www.qualcomm.com/developer/software/qualcomm-ai-engine-direct-sdk)
 
 **2. Set QAIRT SDK Environment**
-Set up the QAIRT SDK by following the official setup guide for your operating system::
+
+Set up the QAIRT SDK by following the official setup guide for your operating system:
+
 [Windows Setup Guide](https://docs.qualcomm.com/bundle/publicresource/topics/80-63442-50/windows_setup.html?product=1601111740009302)
+
 [Linux Setup Guide](https://docs.qualcomm.com/bundle/publicresource/topics/80-70017-15B/qairt-setup.html)
+
 ⚠️ Make sure to select the guide that matches your OS.
 
 **3. Install qai-hub and Llama Model**
@@ -105,7 +110,9 @@ python -m qai_hub_models.models.llama_v3_2_3b_instruct.export --chipset qualcomm
 ```
 
 **5. Run Genie On-Device via genie-t2t-run**
+
 collect additionally required files by following steps below:
+
 <details>
     <summary>prepare Genie configs</summary>
     - download tokenizer.json from [official huggingface](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct/blob/main/tokenizer.json)
@@ -138,9 +145,11 @@ collect additionally required files by following steps below:
         ```
 </details>
 
+then finally run Genie
 ```bash
 ./genie-t2t-run.exe -c genie_config.json -p "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nWhat is France's capital?<|eot_id|><|start_header_id|>assistant<|end_header_id|>"
 ```
+
 
 ### Setup Streamlit Environment
 **1. Clone the repository and navigate to the project directory**
@@ -164,11 +173,12 @@ pip install -r requirements.txt
 cp [path_to_your_QAIRT_SDK]/[your_QAIRT_SDK_version]/bin/genie_bundle ./genie_bundle
 ```
 
+
 ### Generate Database Pickle File
 ```bash
 python db/create_db.py
 ```
-- ⚠️ If you encounter an import error when running the command above, follow these steps:
+⚠️ If you encounter an import error when running the command above, follow these steps:
     1. Move to the db directory:
         ```bash
         cd db
@@ -182,6 +192,8 @@ python db/create_db.py
         python create_db.py
         ```
     5. After successful execution, revert the modified import statements to their original form.
+
+
 
 ## Run Server
 ```bash
