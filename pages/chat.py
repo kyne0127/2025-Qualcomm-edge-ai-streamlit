@@ -6,12 +6,12 @@ from db.retrieve import process_output
 
 st.set_page_config(page_title="chat", layout="centered")
 
-# --- image ---
+## import image ##
 logo_img = image_to_base64("assets/logo.png")
 agent_img = image_to_base64("assets/agent_orange.svg")
 sound_img = image_to_base64("assets/sound_wave.svg")
 
-
+## style definition ##
 st.markdown("""<style>
             
             body { background: white; }
@@ -51,8 +51,9 @@ if "messages" not in st.session_state:
 
 category_list = ['선택 안함', '구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
 
+## show user, agent messages on the screen
 for message in st.session_state.messages:
-    if not message['isUser']:
+    if not message['isUser']: ##if agent
         message['text'] = message['text'].replace('\n', '<br/>')
         st.markdown(f"""
                     <div style="display:flex; justify-content: flex-start; margin-top:8px; margin-bottom:8px;">
@@ -64,7 +65,7 @@ for message in st.session_state.messages:
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
-        if st.session_state.initial:
+        if st.session_state.initial: ##show category options
             selected = option_menu(
                 menu_title=None,
                 options=category_list,
@@ -93,7 +94,7 @@ for message in st.session_state.messages:
                     "nav-link-selected": {"background-color": "#ffb894", "color": "white"},
                 }
             )
-            if selected != "선택 안함":
+            if selected != "선택 안함": ##suggest user recommended questions for each selected category
                 st.session_state.category = selected
                 if selected == "구조물 고립 사고":
                     st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
@@ -130,7 +131,7 @@ for message in st.session_state.messages:
                                                                     - 푹염에 몸이 안좋은데 어떻게 대처해야해?""", 'isUser': False})
                 st.session_state.initial = False
                 
-    else: 
+    else: #if user
         st.markdown(f"""
                     <div style="display:flex; justify-content: flex-end; margin-top:8px;">
                         <div class="user">
@@ -150,12 +151,12 @@ st.markdown(f"""
 
 user_input = st.chat_input("메시지를 입력하세요...")
 
-# ---print user input and agent output    
-if user_input:#if submitted and user_input.strip():
+## print user input and agent output ##
+if user_input: #if submitted and user_input.strip():
     st.session_state.messages.append({'text': user_input.strip(), 'isUser': True})
-    st.rerun()  # 유저 메시지 바로 표시
+    st.rerun() # immediately show user's prompt as soon as user enters his/her questions
 
-# ---response processed and printed
+## agent's response processed and printed ##
 if len(st.session_state.messages) >= 1 and st.session_state.messages[-1]["isUser"] and \
    (len(st.session_state.messages) == 1 or st.session_state.messages[-2]["isUser"] == False):
 

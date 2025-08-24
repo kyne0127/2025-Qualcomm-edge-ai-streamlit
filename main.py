@@ -12,12 +12,12 @@ arrow_img = image_to_base64("assets/arrow_right.svg")
 
 st.markdown("""
 <style>
-/* 기본 스타일 설정 */
+/* set base style */
 body {
     font-family: 'Pretendard', sans-serif;
 }
 
-/* 배너 스타일 */
+/* banner style */
 .banner-container {
     display: flex;
     justify-content: space-between;
@@ -55,7 +55,7 @@ body {
     z-index: 0;
 }
 
-/* 가이드라인 버튼 */
+/* guideline button */
 a.guide-button {
     text-decoration: none;
     background-color: black;
@@ -83,7 +83,7 @@ a.guide-button {
     letter-spacing: -0.2px;
 }
 
-/* Q&A / 사례 버튼 */
+/* Q&A / case button */
 .button-row {
     display: flex;
     gap: 1rem;
@@ -116,7 +116,7 @@ a.case-btn {
     height: auto;
 }
 
-/* 구조 요청 섹션 */
+/* dial section */
 .footer {
     background-color: black;
     color: white;
@@ -149,7 +149,7 @@ a.call-button {
 </style>
 """, unsafe_allow_html=True)
 
-# ---- HTML BODY ---- #
+## HTML BODY ##
 st.markdown(f"""
 <img src="data:image/png;base64,{logo_img}" style="width:120px; marin-bottom:10px; margin-top:-2rem;"/>
 <div class="banner-container">
@@ -161,13 +161,13 @@ st.markdown(f"""
     <img src="data:image/png;base64,{banner_img}" class="banner-img"/>
 </div>
 
-<!-- 가이드라인 보기 버튼 -->
+<!-- Guideline button -->
 <a href="/guideline" target="_self" class="guide-button">
     <div class="guide-button-left">가이드라인<br>보기</div>
     <div class="guide-button-right">지시에 따라 상황을 간단하게 입력하고,<br>대응 가이드라인 받기</div>
 </a>
 
-<!-- Q&A / 사례 검색 -->
+<!-- Q&A / Case search -->
 <div class="button-row">
     <a href="/chat" target="_self" class="qna-btn">
         <div style="margin-left: 4rem; z-index: 0;">Q & A<br>채팅</div>
@@ -179,7 +179,7 @@ st.markdown(f"""
     </a>
 </div>
 
-<!-- 구조 요청 -->
+<!-- Dial section -->
 <div class="footer">
     <div class="footer-title">구조 요청은 하셨나요?</div>
     <div class="footer-sub">가이드라인을 받기 전에, 구조 요청이 가장 먼저입니다.</div>

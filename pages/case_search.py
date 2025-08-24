@@ -7,14 +7,13 @@ import re
 
 st.set_page_config(page_title="case_search", layout="centered")
 
-## --image --
+## import image ##
 paper_img = image_to_base64('assets/paper.svg')
 logo_img = image_to_base64("assets/logo.png")
 
 # style definition
 st.markdown("""
     <style>
-    /* 전체 배경색 검정 html, body, [data-testid="stApp"]  */ 
     html, body, [data-testid="stApp"] {
         background-color: black; //!important
     }
@@ -80,14 +79,14 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# logo
+## logo ##
 st.markdown(f"""
             <a href="/" target="_self" style="text-decoration:none;">
                 <img src="data:image/png;base64,{logo_img}" style="width:120px; margin-bottom:10px; margin-top:-3rem;"/>
             </a>
             """, unsafe_allow_html=True)
 
-# banner
+## banner ##
 st.markdown("""
     <div style="background-color: black; padding:15px; margin-bottom:50px;">
         <div class="title">비슷한 사례 찾기</div>
@@ -99,8 +98,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-#category selection
-
+## category selection ##
 options=['구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
 
 selected = option_menu(
@@ -134,8 +132,7 @@ selected = option_menu(
     }
 )
 
-
-#search form
+## search form ##
 keyword = st.chat_input("키워드나 간단한 상황을 입력하세요...")
 
 results = [{'title': '화재', 'contents': '건물에서 화재가 발생했다.', 'date': '2020-01-09'},
@@ -145,16 +142,14 @@ results = [{'title': '화재', 'contents': '건물에서 화재가 발생했다.
         ]
 
 
-
-
-# if button has been pressed
+## if a search button has been pressed
 if keyword:
     keyword = keyword.strip()
     if not keyword:
         st.warning("키워드를 입력해주세요.")
     with st.spinner(f"'{keyword}'에 대한 사례를 vector db에서 검색 중입니다."):
         index = selected + "_" + "사례"
-        output = process_output(index, keyword, "caseSearch").replace('\n', '<br/>')
+        output = process_output(index, keyword, "caseSearch").replace('\n', '<br/>') ##retrieve data from vectorDB and execute Llama3.2-3b model
         results= re.findall(r"<case>(.*?)</case>", output, re.DOTALL)
     st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
     for result in results:
@@ -169,5 +164,4 @@ if keyword:
                     """, unsafe_allow_html=True)
     
     #<div style="color:#a6a6a6; font-size:12px; letter-spacing:-0.2px; margin-bottom:15px;">{result['date']}</div>
-    
     st.markdown(f"</div>", unsafe_allow_html=True)

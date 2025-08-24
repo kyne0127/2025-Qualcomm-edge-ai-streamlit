@@ -4,11 +4,11 @@ import json
 
 st.set_page_config(page_title="dial", layout="centered")
 
-# ---image---
+## import image ##
 logo_img = image_to_base64("assets/logo.png")
 call_img = image_to_base64("assets/call.svg")
 
-# logo
+## logo ##
 st.markdown(f"""
             <a href="/" target="_self" style="text-decoration:none;">
                 <img src="data:image/png;base64,{logo_img}" style="width:120px; margin-bottom:10px; margin-top:-3rem;"/>

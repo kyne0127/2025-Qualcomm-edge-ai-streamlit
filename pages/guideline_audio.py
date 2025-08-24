@@ -13,7 +13,7 @@ from db.retrieve import process_output
 st.set_page_config(page_title="audio guideline", layout="centered")
 
 
-# --- Style ---
+## style definition ##
 st.markdown("""
     <style>
     a.chat-btn, a.case-btn {
@@ -43,7 +43,7 @@ st.markdown("""
 # """, unsafe_allow_html=True)
 
 
-# --- load model ---
+## load Whisper model ##
 @st.cache_resource
 def load_model():
     return whisper.load_model("small", device='cpu')
@@ -74,7 +74,7 @@ st.markdown(f"""
             </a>
             """, unsafe_allow_html=True)
 
-# --- category selection ---
+## category selection ##
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px;">
                 카테고리
@@ -115,9 +115,7 @@ selected = option_menu(
 )
 st.session_state["category"] = selected
 
-# --- speech guideline suggestion ---
-
-#버튼을 누른 후 말을 하고, 설명이 끝나면 다시 버튼을 눌러 음성 인식을 종료하세요. 
+## speech guideline suggestion ##
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; margin-bottom:10px;">
                 상황 설명
@@ -164,7 +162,7 @@ st.markdown(f"""
             """, unsafe_allow_html=True)
 
 
-# --- recording ---
+## get audio input ##
 audio = mic_recorder(
     start_prompt="클릭하여 녹음 시작",
     stop_prompt="⏹ 녹음 종료",
@@ -173,13 +171,14 @@ audio = mic_recorder(
     format="wav"
 )
 
+## if audio input is provided ##
 if audio:
+    # convert audio format to numpy
     audio_bytes = BytesIO(audio["bytes"])
     st.audio(audio_bytes, format="audio/wav")
     
     audio_bytes.seek(0)
     
-    # aud_array = np.frombuffer(audio_bytes, np.int16).flatten().astype(np.float32) / 32768.0
     seg = AudioSegment.from_file(audio_bytes, format="wav")
     samples = np.array(seg.get_array_of_samples())
     if seg.channels > 1:
@@ -204,7 +203,7 @@ if audio:
     st.session_state.is_clicked = st.button("가이드라인 보기", use_container_width= True)
     
     
-# --- if guideline button is clicked ---
+## if guideline button is clicked ##
 if st.session_state.is_clicked:
     if not st.session_state.stt_result.strip():
         st.warning("음성으로 상황 설명을 해주세요.")
@@ -232,7 +231,7 @@ if st.session_state.is_clicked:
                 st.session_state.is_loading = False
                     
     
-# --- print created guidelines by Qwen ---
+## print generated guidelines by Llama3.2-3b ##
 if st.session_state.is_submit:
     st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; color:#ff762d ;">
@@ -252,7 +251,7 @@ if st.session_state.is_submit:
             st.write(line)
         
         
-# --- page transfer ---
+## page transfer ##
 st.markdown("---")
 st.markdown(f"""
             <div style="display: flex; gap: 0.5rem; justify-content: center;">

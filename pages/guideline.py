@@ -6,7 +6,6 @@ from db.retrieve import process_output
 
 st.set_page_config(page_title="guideline", layout="centered")
 
-# 상태 초기화
 if "category" not in st.session_state:
     st.session_state.category = ""
 if "guidelines" not in st.session_state:
@@ -16,14 +15,14 @@ if "is_loading" not in st.session_state:
 if "is_submit" not in st.session_state:
     st.session_state.is_submit = False
 
-# --- Image ---
+## image import ##
 submit_img = image_to_base64("assets/send.svg")
 logo_img = image_to_base64("assets/logo.png")
 speak_img = image_to_base64("assets/speak_black.svg")
 play_img = image_to_base64("assets/play.svg")
 sound_img = image_to_base64("assets/sound_wave.svg")
 
-# --- Style ---
+## style definition ##
 st.markdown("""
     <style>
     .category-button {
@@ -89,7 +88,7 @@ st.markdown(f"""
             """, unsafe_allow_html=True)
 
 
-# --- category selection ---
+## category selection ##
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px;">
                 카테고리
@@ -131,7 +130,7 @@ selected = option_menu(
 st.session_state["category"] = selected
 
 
-# --- input form ---
+## input form ##
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; margin-top:0rem; margin-bottom:-2.5rem;">
                 상세 상황 설명
@@ -186,7 +185,7 @@ if st.button("가이드라인 보기", use_container_width=True):
             finally:
                 st.session_state.is_loading = False
 
-# 출력
+# print generated guidelines by Llama3.2-3b ##
 if st.session_state.is_submit:
     st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; color:#ff762d; margin-top:20px;">
@@ -205,7 +204,7 @@ if st.session_state.is_submit:
         else:
             st.write(line)
 
-# 페이지 전환 (Streamlit 내부 링크 또는 안내)
+## page transfer ##
 st.markdown("---")
 st.markdown(f"""
             <div style="display: flex; gap: 0.5rem; justify-content: center;">
