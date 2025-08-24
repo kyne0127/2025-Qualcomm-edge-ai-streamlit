@@ -60,8 +60,10 @@ def retrieve(category, input_data, task):
     
     retriever = pdf_databases[category]
     context = retriever.invoke(input_data)
+    print(context)
     
-    response = get_LLM_output(task, input_data, context) ##input keyword serves as context, and context serves as Input in model.py
+    # response = get_LLM_output(task, input_data, context) ##input keyword serves as context, and context serves as Input in model.py
+    # print(response)
     
     return context
     

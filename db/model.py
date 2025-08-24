@@ -1,18 +1,21 @@
 import subprocess
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
 def get_LLM_output(task, context, user_input):
-    model_name = "hwan99/llama3ko-8b-qualcomm-lora_merged"
+    model_name = "meta-llama/Llama-3.2-3B-Instruct"
 
     if task == "GuideLine":
         system_prompt = "[TASK=GUIDELINE]\\nThis is an emergency disaster situation. Generate guidelines based on the Context and the user's question. Keep the response under 500 characters. (Use concise sentences after numbers; avoid unnecessary explanations or introductions)."
     elif task == "QA":
         system_prompt = "[TASK=QA]\\nThis is an emergency disaster situation. Based on the Context provided, answer the user's question with facts only. Keep the response to one sentence under 300 characters, and be concise. (No speculation, unnecessary introductions; maintain original units/numbers)."
     elif task == "caseSearch":
-        system_prompt = "The Input describes how an emergency response case was handled in the past similar emergency cases. Please summarize it in under 500 characters for readability."
+        system_prompt = "The Input describes how an emergency response case was handled in the past similar emergency cases. Please summarize it in under 500 characters for readability. And if a line break seems necessary, please insert \n in the response. (Use concise sentences after numbers; avoid unnecessary explanations or introductions). "
     else:
         raise ValueError("Invalid task. Choose either 'QA' or 'GuideLine' or 'caseSearch'")
 
     print("set system prompt")
+    
     if context == None:
         pass
 

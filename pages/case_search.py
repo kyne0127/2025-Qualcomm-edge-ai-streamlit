@@ -1,7 +1,8 @@
 import streamlit as st
 import time
 from utils import image_to_base64
-from db.retrieve import retrieve, process_output
+from db.retrieve import retrieve
+from db.model import get_LLM_output
 from streamlit_option_menu import option_menu
 import re
 
@@ -146,17 +147,18 @@ if keyword:
     else:
         with st.spinner(f"Searching the vector database for cases related to '{keyword}'"):
             index = selected + "_" + "case"
-            output = retrieve(index, keyword, "caseSearch").replace('\n', '<br/>') ##retrieve data from vectorDB and execute Llama3.2-3b model
-            results= re.findall(r"<case>(.*?)</case>", output, re.DOTALL)
+            results = retrieve(index, keyword, "caseSearch") ##retrieve data from vectorDB and execute Llama3.2-3b model
+            # results= re.findall(r"<case>(.*?)</case>", output, re.DOTALL)
         st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
         for result in results:
+            output = get_LLM_output("caseSearch", keyword, result)
             st.markdown(f"""
                         <div style="background-color: white; padding: 25px 20px; border-radius:20px; width: 350px; min-height: 100px; margin-bottom: 30px;">
                             <div style="display:flex; margin-bottom:5px;">
                                 <div style="color:#ff762d; font-weight:600; font-size:22px; letter-spacing:-0.2px; margin-bottom:-2px;">{selected}</div>
                                 <img src="data:image/svg+xml;base64,{paper_img}" style="width:20px; margin-left:5px;"/>
                             </div>
-                            <div>{result}</div>
+                            <div>{output}</div>
                         </div>
                         """, unsafe_allow_html=True)
         
