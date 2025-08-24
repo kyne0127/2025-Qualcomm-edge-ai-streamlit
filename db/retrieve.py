@@ -55,11 +55,13 @@ def process_output(category, input_data, task):
     response = get_LLM_output(task, context, input_data)
     return response
 
-def retrieve(category, input_data):
+def retrieve(category, input_data, task):
     global pdf_databases
     
     retriever = pdf_databases[category]
     context = retriever.invoke(input_data)
+    
+    response = get_LLM_output(task, input_data, context) ##input keyword serves as context, and context serves as Input in model.py
     
     return context
     

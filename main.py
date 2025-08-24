@@ -31,25 +31,27 @@ body {
 }
 .banner-head-orange {
     color: #ff762d;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     line-height: 1.2;
     letter-spacing: -0.3px;
 }
 .banner-head-black {
     color: black;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
-    line-height: 1.4;
+    line-height: 1.2;
     letter-spacing: -0.3px;
 }
 .banner-sub {
     font-size: 13px;
     margin-top: 0.5rem;
+    line-height: 1.8;
 }
 .banner-img {
     position: absolute;
-    left: 18rem;
+    left: 20rem;
+    margin-left: 2px;
     bottom: 1;
     width: 180px;
     z-index: 0;
@@ -154,37 +156,37 @@ st.markdown(f"""
 <img src="data:image/png;base64,{logo_img}" style="width:120px; marin-bottom:10px; margin-top:-2rem;"/>
 <div class="banner-container">
     <div class="banner-text">
-        <div class="banner-head-orange">여러분의 안전을 위해,</div>
-        <div class="banner-head-black">비상 대응 어시스턴트</div>
-        <div class="banner-sub">괜찮아요. 저에게 어떤 상황에 처해있는지 알려주세요.</div>
+        <div class="banner-head-orange">For your safety,</div>
+        <div class="banner-head-black">Emergency Response Assistant</div>
+        <div class="banner-sub">Just let me know what situation you're facing.</div>
     </div>
     <img src="data:image/png;base64,{banner_img}" class="banner-img"/>
 </div>
 
 <!-- Guideline button -->
 <a href="/guideline" target="_self" class="guide-button">
-    <div class="guide-button-left">가이드라인<br>보기</div>
-    <div class="guide-button-right">지시에 따라 상황을 간단하게 입력하고,<br>대응 가이드라인 받기</div>
+    <div class="guide-button-left">View<br>Guidelines</div>
+    <div class="guide-button-right">Briefly describe your situation,<br>and receive guidelines</div>
 </a>
 
 <!-- Q&A / Case search -->
 <div class="button-row">
     <a href="/chat" target="_self" class="qna-btn">
-        <div style="margin-left: 4rem; z-index: 0;">Q & A<br>채팅</div>
+        <div style="margin-left: 4rem; z-index: 0;">Q & A<br>Chat</div>
         <img src="data:image/png;base64,{q_n_a_img}" class="qna-btn img"/>
     </a>
     <a href="/case_search" target="_self" class="case-btn">
         <img src="data:image/png;base64,{case_search_img}" class="case-btn img"/>
-        <div style="margin-left: 4rem; z-index: 0;">비슷한 사례<br>검색하기</div>
+        <div style="margin-left: 4rem; z-index: 0;">Search for<br>Similar Cases</div>
     </a>
 </div>
 
 <!-- Dial section -->
 <div class="footer">
-    <div class="footer-title">구조 요청은 하셨나요?</div>
-    <div class="footer-sub">가이드라인을 받기 전에, 구조 요청이 가장 먼저입니다.</div>
+    <div class="footer-title">Have you called for rescue?</div>
+    <div class="footer-sub">Before receiving any guidelines, making a rescue call should be your first step.</div>
     <a href="/dial" target="_self" class="call-button">
-        전화번호부 보기
+        View Emergency Contacts
         <img src="data:image/svg+xml;base64,{arrow_img}" style="height:16px; width:auto;"/>
     </a>
 </div>

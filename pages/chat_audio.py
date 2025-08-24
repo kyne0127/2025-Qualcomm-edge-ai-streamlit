@@ -57,16 +57,23 @@ st.markdown(f"""
             """, unsafe_allow_html=True)
 
 if "messages" not in st.session_state:
-    st.session_state.messages = [{'text': '상황에 맞는 카테고리를 선택해주세요.', "isUser": False}]
-    st.session_state.category = ""
+    st.session_state.messages = [{'text': 'Please select the category that best fits your situation.', "isUser": False}]
+# if "category" not in st.session_state:
+st.session_state.category = ""
+if "input" not in st.session_state:
     st.session_state.input = ""
+if "is_loading" not in st.session_state:
     st.session_state.is_loading = False
+if "initial" not in st.session_state:
     st.session_state.initial = True
+if "submit_audio" not in st.session_state:
     st.session_state.submit_audio = None
+if "last_audio_id" not in st.session_state:
     st.session_state.last_audio_id = None
+if "recorder_seq" not in st.session_state:
     st.session_state.recorder_seq = 0
 
-category_list = ['선택 안함', '구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
+category_list = ['None Selected', 'Collapse', 'High Temp', 'Maritime', 'Mountain', 'Gen Emergency']
 
 ## show user, agent messages on the screen
 for message in st.session_state.messages:
@@ -111,41 +118,41 @@ for message in st.session_state.messages:
                     "nav-link-selected": {"background-color": "#ffb894", "color": "white"},
                 }
             )
-            if selected != "선택 안함": ##suggest user recommended questions for each selected category
+            if selected != "None Selected": ##suggest user recommended questions for each selected category
                 st.session_state.category = selected
-                if selected == "구조물 고립 사고":
-                    st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
-                                                                    [예시 질문]\n
-                                                                    1. 지하차도에 고립되어 있을 때 가장 먼저 뭐를 해야할까?\n
-                                                                    2. 건물이 붕괴되었는데 출입문을 찾으려면 어떻게 해야돼?\n
-                                                                    3. 침수된 지하주차장에 갇혀 있는데 뭐부터 해야돼?""", 'isUser': False})
-                elif selected == '고온산업시설 사고':
-                    st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
-                                                                    [예시 질문]\n
-                                                                    - 산업시설에 고립되어 있을 때 가장 먼저 뭐를 해야할까?\n
-                                                                    - 주변 온도가 점점 뜨거워질 때 어떻게 대처해야해?\n
-                                                                    - 건물 비상 출입구는 보통 어디에 있어?""", 'isUser': False})
+                if selected == "Collapse":
+                    st.session_state.messages.append({'text': f"""You have selected the {selected} category.\n
+                                                                    [Example Questions]\n
+                                                                    1. What should I do first when trapped in an underpass?\n
+                                                                    2. A building has collapsed — how can I find an exit?\n
+                                                                    3. I’m trapped in a flooded underground parking lot — what should I do first?""", 'isUser': False})
+                elif selected == 'High Temp':
+                    st.session_state.messages.append({'text': f"""You have selected the {selected} category.\n
+                                                                    [Example Questions]\n
+                                                                    - What should I do first when trapped in an industrial facility?\n
+                                                                    - How should I respond as the surrounding temperature keeps rising?\n
+                                                                    - Where are emergency exits usually located in buildings?""", 'isUser': False})
                 
-                elif selected == '해상 사고':
-                    st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
-                                                                    [예시 질문]\n
-                                                                    - 해상에서 조난 당했을 때 조난 신호는 어떻게 보내?\n
-                                                                    - 배가 침몰하고 있는데 지금 대피해야 돼 아니면 선박에 있어야돼?\n
-                                                                    - 언제 구명정 하강이 가능해?""", 'isUser': False})
+                elif selected == 'Maritime':
+                    st.session_state.messages.append({'text': f"""You have selected the {selected} category.\n
+                                                                    [Example Questions]\n
+                                                                    - How do I send a distress signal when stranded at sea?\n
+                                                                    - The ship is sinking — should I evacuate now or stay on board?\n
+                                                                    - When is it safe to launch a lifeboat?""", 'isUser': False})
                     
-                elif selected == '산악 사고':
-                    st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
-                                                                    [예시 질문]\n
-                                                                    - 산 등산 중 길을 아예 잃었을 떄는 뭐부터 해야돼?\n
-                                                                    - 저체온증을 막으려면 어떻게 해야될까?\n
-                                                                    - 야생 곰을 만났을 때는 어떻게 하는게 가장 안전해?""", 'isUser': False})
+                elif selected == 'Mountain':
+                    st.session_state.messages.append({'text': f"""You have selected the {selected} category.\n
+                                                                    [Example Questions]\n
+                                                                    - What should I do first when I’ve completely lost the trail while hiking?\n
+                                                                    - How can I prevent hypothermia?\n
+                                                                    - What’s the safest way to respond to encountering a wild bear?""", 'isUser': False})
                     
-                elif selected == '일반 응급':
-                    st.session_state.messages.append({'text': f"""{selected} 카테고리를 선택하셨습니다.\n
-                                                                    [예시 질문]\n
-                                                                    - 가정용 칼에 손이 절단됐을 경우 어떻게 해여돼?\n
-                                                                    - 음식을 잘못 먹어 음식 알레르기 증상이 나타날 경우 뭐부터 해야될까?\n
-                                                                    - 푹염에 몸이 안좋은데 어떻게 대처해야해?""", 'isUser': False})
+                elif selected == 'Gen Emergency':
+                    st.session_state.messages.append({'text': f"""You have selected the {selected} category.\n
+                                                                    [Example Questions]\n
+                                                                    - What should I do if I cut my hand with a kitchen knife?\n
+                                                                    - What should I do first if I have an allergic reaction to food?\n
+                                                                    - I feel unwell due to the heat — how should I respond?""", 'isUser': False})
                 st.session_state.initial = False
                 
     else: #if user
@@ -168,8 +175,8 @@ st.markdown(f"""
 
 ## get audio input from user ##
 user_input = mic_recorder(
-    start_prompt="클릭하여 녹음 시작",
-    stop_prompt="⏹ 녹음 종료",
+    start_prompt="Click to start recording",
+    stop_prompt="⏹ Stop recording",
     use_container_width=True,
     key=f"recorder_{st.session_state.recorder_seq}",
     format="wav"
@@ -215,10 +222,11 @@ if st.session_state.submit_audio is not None:
 if len(st.session_state.messages) >= 1 and st.session_state.messages[-1]["isUser"] and \
    (len(st.session_state.messages) == 1 or st.session_state.messages[-2]["isUser"] == False):
 
-    with st.spinner("답변을 생성하는 중..."):
+    with st.spinner("Generating responses..."):
         user_text = st.session_state.messages[-1]['text']
-        index = st.session_state.category + "_" + "매뉴얼"
+        index = st.session_state.category + "_" + "manual"
         response = process_output(index, user_text, "QA")
+        # response = "If you cut your hand with a kitchen knife, immediately visit a doctor."
         
     st.session_state.messages.append({'text': response, 'isUser': False})
     st.rerun()

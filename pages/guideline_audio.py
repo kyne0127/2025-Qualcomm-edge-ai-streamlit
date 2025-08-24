@@ -77,11 +77,11 @@ st.markdown(f"""
 ## category selection ##
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px;">
-                카테고리
+                Category
             </div>
             """, unsafe_allow_html=True)
 
-options=['선택 안함', '구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
+options=['None Selected', 'Collapse', 'High Temp', 'Maritime', 'Mountain', 'Gen Emergency']
 
 selected = option_menu(
     menu_title=None,
@@ -118,42 +118,42 @@ st.session_state["category"] = selected
 ## speech guideline suggestion ##
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; margin-bottom:10px;">
-                상황 설명
+                Situation Description
             </div>
             <div style="margin-bottom:20px;">
-                아래 내용이 포함되게 현재 상황에 대해 설명해주세요.
+                Please describe the current situation, including the details below.
             <div/>
 
             <div style="display: flex; margin-top:20px; align-items:center;">
                 <img src="data:image/svg+xml;base64, {descript_img}" style="height:20px; margin-right:5px;"/>
-                <div style="font-weight:bold; font-size:16px; color:#ff762d;">상세 상황 설명:</div>
+                <div style="font-weight:bold; font-size:16px; color:#ff762d;">Detailed Situation:</div>
             </div>
             <div style="font-size:14px;">
-                예) 지하주차장 천장이 일부 붕괴되어 지하에 10명 이상 갇힘.
+                e.g. An underground parking lot has collapsed, and more than 10 people are trapped underground.
             </div>
             
             <div style="display: flex; margin-top:10px; align-items:center;">
                 <img src="data:image/svg+xml;base64, {descript_img}" style="height:20px; margin-right:5px;"/>
-                <div style="font-weight:bold; font-size:16px; color:#ff762d;">장소 설명:</div>
+                <div style="font-weight:bold; font-size:16px; color:#ff762d;">Location:</div>
             </div>
             <div style="font-size:14px;">
-                예) 근처에 역삼역이 있고, 지하 깊이는 깊지 않음.
+                e.g. Near Yeoksam Station, and the underground level is not very deep.
             </div>
             
             <div style="display: flex; margin-top:10px; align-items:center;">
                 <img src="data:image/svg+xml;base64, {descript_img}" style="height:20px; margin-right:5px;"/>
-                <div style="font-weight:bold; font-size:16px; color:#ff762d;">인원 및 사고 발생 시각 설명:</div>
+                <div style="font-weight:bold; font-size:16px; color:#ff762d;">People Involved & Time of Incident:</div>
             </div>
             <div style="font-size:14px;">
-                예) 노약자 1명, 어린이 2명 있음. 10분 전 사고 발생.
+                e.g. 1 elderly person presents. The incident occurred 10 minutes ago.
             </div>
             
             <div style="display: flex; margin-top:10px; align-items:center;">
                 <img src="data:image/svg+xml;base64, {descript_img}" style="height:20px; margin-right:5px;"/>
-                <div style="font-weight:bold; font-size:16px; color:#ff762d;">특이 사항 설명:</div>
+                <div style="font-weight:bold; font-size:16px; color:#ff762d;">Special Notes:</div>
             </div>
             <div style="font-size:14px;">
-                예) 휠체어 이용자가 있음, 다리 부상이 심함.
+                e.g. One person is using a wheelchair, and one has a serious leg injury.
             </div>
             """, unsafe_allow_html=True)
 
@@ -164,8 +164,8 @@ st.markdown(f"""
 
 ## get audio input ##
 audio = mic_recorder(
-    start_prompt="클릭하여 녹음 시작",
-    stop_prompt="⏹ 녹음 종료",
+    start_prompt="Click to start recording",
+    stop_prompt="⏹ Stop recording",
     use_container_width=True,
     key="recorder",
     format="wav"
@@ -200,22 +200,22 @@ if audio:
                 </div>
                 """, unsafe_allow_html=True)
     
-    st.session_state.is_clicked = st.button("가이드라인 보기", use_container_width= True)
+    st.session_state.is_clicked = st.button("View Guidelines", use_container_width= True)
     
     
 ## if guideline button is clicked ##
 if st.session_state.is_clicked:
     if not st.session_state.stt_result.strip():
-        st.warning("음성으로 상황 설명을 해주세요.")
-    elif st.session_state.category == "선택 안함":
-        st.warning("카테고리를 선택해주세요.")
+        st.warning("Please describe the situation using your voice.")
+    elif st.session_state.category == "None Selected":
+        st.warning("Category selection is required.")
     else:    
         st.session_state.is_loading = True
         st.session_state.is_submit = True
         
-        with st.spinner("가이드라인 생성 중..."):
+        with st.spinner("Generating guidelines..."):
             try:
-                index = st.session_state.category + "_" + "매뉴얼"
+                index = st.session_state.category + "_" + "manual"
                 output = process_output(index, st.session_state.stt_result, "GuideLine")
                 # output = f"""
                 #     ### ** 비상 가이드라인
@@ -225,7 +225,7 @@ if st.session_state.is_clicked:
                 chunks = [c for c in output.split('\n') if c.strip()]
                 st.session_state.guidelines = chunks
             except Exception as e:
-                st.session_state.guidelines = ["❌ 오류가 발생했습니다."]
+                st.session_state.guidelines = ["❌ An error has occured."]
                 print(e)
             finally:
                 st.session_state.is_loading = False
@@ -235,7 +235,7 @@ if st.session_state.is_clicked:
 if st.session_state.is_submit:
     st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; color:#ff762d ;">
-               가이드라인
+               Guideline
             </div>
             """, unsafe_allow_html=True)
     for line in st.session_state.guidelines:
@@ -256,10 +256,10 @@ st.markdown("---")
 st.markdown(f"""
             <div style="display: flex; gap: 0.5rem; justify-content: center;">
                 <a href="/chat" target="_self" class="chat-btn"> 
-                    이어서 Q&A 채팅하기
+                    Continue with Q&A Chat
                 </a>
                 <a href="/case_search" target="_self" class="case-btn">
-                    비슷한 대응 사례 찾기
+                    Continue with Q&A Chat
                 </a>
             </div>
                 """, unsafe_allow_html=True)

@@ -89,17 +89,17 @@ st.markdown(f"""
 ## banner ##
 st.markdown("""
     <div style="background-color: black; padding:15px; margin-bottom:50px;">
-        <div class="title">비슷한 사례 찾기</div>
+        <div class="title">Search for Similar Cases</div>
         <div class="description">
-            현재 상황과 비슷한 과거 재난 상황 속에서,<br/>
-            어떻게 비상 대응을 했는지<br/>
-            그 사례들을 자세하게 살펴보세요.
+            Explore how emergency responses were carried out<br/>
+            in past disaster situations<br/>
+            similar to your current one.
         </div>
     </div>
 """, unsafe_allow_html=True)
 
 ## category selection ##
-options=['구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
+options=['None Selected', 'Collapse', 'High Temp', 'Maritime', 'Mountain', 'Gen Emergency']
 
 selected = option_menu(
     menu_title=None,
@@ -133,35 +133,32 @@ selected = option_menu(
 )
 
 ## search form ##
-keyword = st.chat_input("키워드나 간단한 상황을 입력하세요...")
-
-results = [{'title': '화재', 'contents': '건물에서 화재가 발생했다.', 'date': '2020-01-09'},
-           {'title': '지하구조물 고립', 'contents': '많은 양의 비로 아파트 지하주차장이 침수되었는데, 차를 빼러 내려간 주민 1명이 지하주차장에 고립되었다가 구조되었다.', 'date': '2020-01-09'},
-           {'title': '해상 사고', 'contents': '스쿠버다이빙을 하던 중 심한 두통이 발생하였다.', 'date': '2020-01-09'},
-           {'title': '화재', 'contents': '건물에서 화재가 발생했다.', 'date': '2020-01-09'},
-        ]
-
+keyword = st.chat_input("Enter a keyword or brief description of the situation...")
+# results = ['temporarys']
 
 ## if a search button has been pressed
 if keyword:
     keyword = keyword.strip()
     if not keyword:
-        st.warning("키워드를 입력해주세요.")
-    with st.spinner(f"'{keyword}'에 대한 사례를 vector db에서 검색 중입니다."):
-        index = selected + "_" + "사례"
-        output = process_output(index, keyword, "caseSearch").replace('\n', '<br/>') ##retrieve data from vectorDB and execute Llama3.2-3b model
-        results= re.findall(r"<case>(.*?)</case>", output, re.DOTALL)
-    st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
-    for result in results:
-        st.markdown(f"""
-                    <div style="background-color: white; padding: 25px 20px; border-radius:20px; width: 350px; min-height: 100px; margin-bottom: 30px;">
-                        <div style="display:flex; margin-bottom:5px;">
-                            <div style="color:#ff762d; font-weight:600; font-size:22px; letter-spacing:-0.2px; margin-bottom:-2px;">{selected}</div>
-                            <img src="data:image/svg+xml;base64,{paper_img}" style="width:20px; margin-left:5px;"/>
+        st.warning("Please enter a keyword.")
+    if selected == "None Selected":
+        st.warning("Please select a category.")
+    else:
+        with st.spinner(f"Searching the vector database for cases related to '{keyword}'"):
+            index = selected + "_" + "case"
+            output = retrieve(index, keyword, "caseSearch").replace('\n', '<br/>') ##retrieve data from vectorDB and execute Llama3.2-3b model
+            results= re.findall(r"<case>(.*?)</case>", output, re.DOTALL)
+        st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
+        for result in results:
+            st.markdown(f"""
+                        <div style="background-color: white; padding: 25px 20px; border-radius:20px; width: 350px; min-height: 100px; margin-bottom: 30px;">
+                            <div style="display:flex; margin-bottom:5px;">
+                                <div style="color:#ff762d; font-weight:600; font-size:22px; letter-spacing:-0.2px; margin-bottom:-2px;">{selected}</div>
+                                <img src="data:image/svg+xml;base64,{paper_img}" style="width:20px; margin-left:5px;"/>
+                            </div>
+                            <div>{result}</div>
                         </div>
-                        <div>{result}</div>
-                    </div>
-                    """, unsafe_allow_html=True)
-    
-    #<div style="color:#a6a6a6; font-size:12px; letter-spacing:-0.2px; margin-bottom:15px;">{result['date']}</div>
-    st.markdown(f"</div>", unsafe_allow_html=True)
+                        """, unsafe_allow_html=True)
+        
+        #<div style="color:#a6a6a6; font-size:12px; letter-spacing:-0.2px; margin-bottom:15px;">{result['date']}</div>
+        st.markdown(f"</div>", unsafe_allow_html=True)

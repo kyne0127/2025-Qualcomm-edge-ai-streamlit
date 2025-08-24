@@ -4,11 +4,11 @@ def get_LLM_output(task, context, user_input):
     model_name = "hwan99/llama3ko-8b-qualcomm-lora_merged"
 
     if task == "GuideLine":
-        system_prompt = "[TASK=GUIDELINE]\\n지금은 비상 재난 상황이야. 아래 user가 제공한 상황(question)에 대해, context를 참고하여 가이드라인을 생성해줘. 답변은 500자 이내로 작성해줘.\\n\\n(숫자 뒤에는 간결한 문장. 불필요한 설명·서론 금지)"
+        system_prompt = "[TASK=GUIDELINE]\\nThis is an emergency disaster situation. Generate guidelines based on the Context and the user's question. Keep the response under 500 characters. (Use concise sentences after numbers; avoid unnecessary explanations or introductions)."
     elif task == "QA":
-        system_prompt = "[TASK=QA]\\n지금은 비상 재난 상황이야. 아래 user가 제공한 상황(question)에 대해, Context에 근거해 사실만 답해줘. 답변은 한 문장, 150자 이내로 간결히 작성해줘. (추정·불필요한 서론 금지, 단위/수치 그대로 유지)"
+        system_prompt = "[TASK=QA]\\nThis is an emergency disaster situation. Based on the Context provided, answer the user's question with facts only. Keep the response to one sentence under 300 characters, and be concise. (No speculation, unnecessary introductions; maintain original units/numbers)."
     elif task == "caseSearch":
-        system_prompt = "친절한 챗봇으로서 상대방의 요청에 최대한 자세하고 친절하게 답하자. 모든 대답은 한국어(Korean)으로 대답해줘."
+        system_prompt = "The Input describes how an emergency response case was handled in the past similar emergency cases. Please summarize it in under 500 characters for readability."
     else:
         raise ValueError("Invalid task. Choose either 'QA' or 'GuideLine' or 'caseSearch'")
 
@@ -31,7 +31,7 @@ def get_LLM_output(task, context, user_input):
         )
 
     escaped_prompt = prompt_template.replace('"', '`"').replace("'", "''")
-    command = f'./genie-t2t-run.exe -c genie_config.json -p "{escaped_prompt}"'
+    command = f'../genie_bundle/genie-t2t-run.exe -c genie_config.json -p "{escaped_prompt}"' ##should change the path to genie_bundle
 
     try:
         print("Executing PowerShell command...")

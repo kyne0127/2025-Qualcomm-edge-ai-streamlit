@@ -80,7 +80,7 @@ st.markdown(f"""
             <a href="/guideline_audio" target="_self" style="display:block; margin-bottom:25px; width:100%; padding: 14px 20px; font-weight:bold; font-size:16px; border-radius:100px; background-color:#fff1ea; text-decoration: none; color:black;">
                 <div style="display:flex; justify-content:center; text-align:center; align-items:center;">
                     <img src="data:image/svg+xml;base64,{sound_img}" style="height:30px; margin-right:10px;"/>
-                    <div>음성으로 상황 설명하기</div>
+                    <div>Describe the Situation by Voice</div>
                     <img src="data:image/svg+xml;base64,{sound_img}" style="height:30px; margin-left:10px;"/>
                     <img src="data:image/svg+xml;base64,{play_img}" style="height:22px; margin-left:4px;"/>
                 </div>
@@ -91,11 +91,11 @@ st.markdown(f"""
 ## category selection ##
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px;">
-                카테고리
+                Category
             </div>
             """, unsafe_allow_html=True)
 
-options=['선택 안함', '구조물 고립 사고', '고온산업시설 사고', '해상 사고', '산악 사고', '일반 응급']
+options=['None Selected', 'Collapse', 'High Temp', 'Maritime', 'Mountain', 'Gen Emergency']
 
 selected = option_menu(
     menu_title=None,
@@ -133,44 +133,44 @@ st.session_state["category"] = selected
 ## input form ##
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; margin-top:0rem; margin-bottom:-2.5rem;">
-                상세 상황 설명
+                Detailed Situation
             </div>
             """, unsafe_allow_html=True)
-situation = st.text_area(" ", placeholder="예) 지하주차장 천장이 일부 붕괴되어 지하에 10명 이상 갇힘.", height=120) #현재 처한 상황에 대해 설명합니다. 
+situation = st.text_area(" ", placeholder="e.g. An underground parking lot has collapsed, and more than 10 people are trapped underground.", height=120) #현재 처한 상황에 대해 설명합니다. 
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; margin-top:0.3rem; margin-bottom:-2.5rem;">
-                장소 설명
+                Location
             </div>
             """, unsafe_allow_html=True)
-place = st.text_area(" ", placeholder="예) 근처에 역삼역이 있고, 지하 깊이는 깊지 않음.", height=120) #현재 있는 장소나 주변 환경에 대해 설명합니다. 
+place = st.text_area(" ", placeholder="e.g. Near Yeoksam Station, and the underground level is not very deep.", height=120) #현재 있는 장소나 주변 환경에 대해 설명합니다. 
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; margin-top:0.3rem; margin-bottom:-2.5rem;">
-                인원 및 사고 발생 시각 설명
+                People Involved & Time of Incident
             </div>
             """, unsafe_allow_html=True)
-num_and_time = st.text_area(" ", placeholder="예) 노약자 1명, 어린이 2명 있음. 10분 전 사고 발생.", height=70) #인원과 재난 시각에 대해 설명합니다.
+num_and_time = st.text_area(" ", placeholder="e.g. 1 elderly person presents. The incident occurred 10 minutes ago.", height=70) #인원과 재난 시각에 대해 설명합니다.
 st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; margin-top:0.3rem; margin-bottom:-2.5rem;">
-                특이 사항 설명
+                Special Notes
             </div>
             """, unsafe_allow_html=True)
-injury = st.text_area(" ", placeholder="예) 휠체어 이용자가 있음, 다리 부상이 심함", height=120)
+injury = st.text_area(" ", placeholder="e.g. One person is using a wheelchair, and one has a serious leg injury.", height=120)
 # if button is pressed
-if st.button("가이드라인 보기", use_container_width=True):
+if st.button("View Guidelines", use_container_width=True):
     if not situation.strip():
-        st.warning("상황 설명은 필수입니다.")
+        st.warning("Detailed Situation is required.")
     else:
         st.session_state.is_loading = True
         st.session_state.is_submit = True
-        with st.spinner("가이드라인 생성 중..."):
+        with st.spinner("Generating guidelines..."):
             try:
                 # time.sleep(2)
-                input = f"상황: {situation}, "
-                if place: input+= f"장소: {place}, "
-                if num_and_time: input+= f"인원 및 사건 발생 시각: {num_and_time}, "
-                if injury: input+= f"특이사항: {injury}, "
+                input = f"detailed situation: {situation}, "
+                if place: input+= f"location: {place}, "
+                if num_and_time: input+= f"people involved & time of incident: {num_and_time}, "
+                if injury: input+= f"special notes: {injury}, "
                 
-                index = st.session_state.category + "_" + "매뉴얼"
+                index = st.session_state.category + "_" + "manual"
                 output = process_output(index, input, "GuideLine")
                 # output = f"""
                 #     ### ** 비상 가이드라인
@@ -181,7 +181,7 @@ if st.button("가이드라인 보기", use_container_width=True):
                 chunks = [c for c in output.split('\n') if c.strip()]
                 st.session_state.guidelines = chunks
             except Exception as e:
-                st.session_state.guidelines = ["❌ 오류가 발생했습니다."]
+                st.session_state.guidelines = ["❌ An error has occured."]
             finally:
                 st.session_state.is_loading = False
 
@@ -189,7 +189,7 @@ if st.button("가이드라인 보기", use_container_width=True):
 if st.session_state.is_submit:
     st.markdown(f"""
             <div style="font-weight:bold; font-size:20px; color:#ff762d; margin-top:20px;">
-               가이드라인
+               Guideline
             </div>
             """, unsafe_allow_html=True)
     for line in st.session_state.guidelines:
@@ -209,10 +209,10 @@ st.markdown("---")
 st.markdown(f"""
             <div style="display: flex; gap: 0.5rem; justify-content: center;">
                 <a href="/chat" target="_self" class="chat-btn"> 
-                    이어서 Q&A 채팅하기
+                    Continue with Q&A Chat
                 </a>
                 <a href="/case_search" target="_self" class="case-btn">
-                    비슷한 대응 사례 찾기
+                    Continue with Q&A Chat
                 </a>
             </div>
                 """, unsafe_allow_html=True)
