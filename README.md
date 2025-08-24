@@ -111,47 +111,57 @@ python -m qai_hub_models.models.llama_v3_2_3b_instruct.export --chipset qualcomm
 
 **5. Run Genie On-Device via genie-t2t-run**
 
-collect additionally required files by following steps below:
+Collect additional required files by following the steps below:
 
 <details>
-    <summary>prepare Genie configs</summary>
-    - download tokenizer.json from [official huggingface](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct/blob/main/tokenizer.json)
-    - get genie_config.json
-        ```bash
-        git clone https://github.com/quic/ai-hub-apps.git
-        ```
-        ```bash
-        cp ai-hub-apps/tutorials/llm_on_genie/configs/genie/llama_v3_8b_instruct.json genie_bundle/genie_config.json
-        ```
-    - get htp configuration file
-        ```bash
-        cp ai-hub-apps/tutorials/llm_on_genie/configs/htp/htp_backend_ext_config.json.template genie_bundle/htp_backend_ext_config.json
-        ```
-    - when finished with the above steps, your bundle should look like this:
-        ```bash
-        genie_bundle/
-        genie_config.json
-        htp_backend_ext_config.json
-        tokenizer.json
-        <model_id>_part_1_of_N.bin
-        ...
-        <model_id>_part_N_of_N.bin
-        ```
-    - copy Genie's shared libraries and executable to our bundle
-        ```bash
-        cp $QNN_SDK_ROOT/lib/hexagon-v73/unsigned/* genie_bundle
-        cp $QNN_SDK_ROOT/lib/aarch64-windows-msvc/* genie_bundle
-        cp $QNN_SDK_ROOT/bin/aarch64-windows-msvc/genie-t2t-run.exe genie_bundle
-        ```
+  <summary>Prepare Genie configs</summary>
+
+  - Download `tokenizer.json` from [official Hugging Face](https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct/blob/main/tokenizer.json)
+
+  - Get `genie_config.json`:
+  
+    ```bash
+    git clone https://github.com/quic/ai-hub-apps.git
+    cp ai-hub-apps/tutorials/llm_on_genie/configs/genie/llama_v3_8b_instruct.json genie_bundle/genie_config.json
+    ```
+
+  - Get HTP configuration file:
+
+    ```bash
+    cp ai-hub-apps/tutorials/llm_on_genie/configs/htp/htp_backend_ext_config.json.template genie_bundle/htp_backend_ext_config.json
+    ```
+
+  - Your bundle directory should look like this:
+
+    ```bash
+    genie_bundle/
+    genie_config.json
+    htp_backend_ext_config.json
+    tokenizer.json
+    <model_id>_part_1_of_N.bin
+    ...
+    <model_id>_part_N_of_N.bin
+    ```
+
+  - Copy Genie’s shared libraries and executable:
+
+    ```bash
+    cp $QNN_SDK_ROOT/lib/hexagon-v73/unsigned/* genie_bundle
+    cp $QNN_SDK_ROOT/lib/aarch64-windows-msvc/* genie_bundle
+    cp $QNN_SDK_ROOT/bin/aarch64-windows-msvc/genie-t2t-run.exe genie_bundle
+    ```
+
 </details>
 
-then finally run Genie
+
+then run Genie
 ```bash
 ./genie-t2t-run.exe -c genie_config.json -p "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nWhat is France's capital?<|eot_id|><|start_header_id|>assistant<|end_header_id|>"
 ```
 
+<br/>
 
-### Setup Streamlit Environment
+### 2️⃣Setup Streamlit Environment
 **1. Clone the repository and navigate to the project directory**
 ```bash
 git clone https://github.com/chaaenni/2025-Qualcomm-edge-ai-streamlit.git
@@ -173,8 +183,9 @@ pip install -r requirements.txt
 cp [path_to_your_QAIRT_SDK]/[your_QAIRT_SDK_version]/bin/genie_bundle ./genie_bundle
 ```
 
+<br/>
 
-### Generate Database Pickle File
+### 3️⃣Generate Database Pickle File
 ```bash
 python db/create_db.py
 ```
