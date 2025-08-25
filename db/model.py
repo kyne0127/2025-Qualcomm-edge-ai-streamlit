@@ -3,7 +3,6 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 def get_LLM_output(task, context, user_input):
-    model_name = "meta-llama/Llama-3.2-3B-Instruct"
 
     if task == "GuideLine":
         system_prompt = "[TASK=GUIDELINE]\nThis is an emergency disaster situation. Based on the [Context] provided below, create a guideline referring to the [Context]. Output must follow the specified format only.\n\nResponse:\n1. ...\n2. ...\n3. ...\n4. ..."
