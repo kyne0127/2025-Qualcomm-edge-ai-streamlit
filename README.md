@@ -47,8 +47,8 @@ Users can simply enter keywords to search past emergency response cases and manu
 ├── requirements.txt
 ### necessary data
 ├── data/
-│   ├── 구조물 고립 사고_매뉴얼.docx
-│   ├── 구조물 고립 사고_사례.docx
+│   ├── Collapse_case.docx
+│   ├── Collapse_manual.docx
 │   ├── ...
 │   ├── dial.json
 │   └── full_data.csv
@@ -234,6 +234,15 @@ python db/create_db.py
 
 </details>
 
+### 3️⃣Generate Database Pickle File
+**1. Open 'create_db.py' and change the base_directory to your own path for this repository**
+```python
+base_directory = '[your_own_path]' #line 80
+```
+**2. Open 'retrieve.py' and change the base_directory to your own path for this repository**
+```python
+base_directory = '[your_own_path]' #line 17
+```
 
 <br/>
 

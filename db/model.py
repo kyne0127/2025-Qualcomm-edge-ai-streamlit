@@ -3,7 +3,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 def get_LLM_output(task, context, user_input):
-
+    #Select system prompt template depending on the task type
     if task == "GuideLine":
         system_prompt = "[TASK=GUIDELINE]\nThis is an emergency disaster situation. Based on the [Context] provided below, create a guideline referring to the [Context]. Output must follow the specified format only.\n\nResponse:\n1. ...\n2. ...\n3. ...\n4. ..."
     elif task == "QA":
@@ -11,10 +11,12 @@ def get_LLM_output(task, context, user_input):
     elif task == "caseSearch":
         system_prompt = "[TASK=CaseStudy]\n[Context] describes how emergency response cases were handled in past similar emergencies.\nFor readability, please summarize in the following format:\n1.Incident Overview: ..,\n2.Data/Location: ..,\n3.Casualties: ..,\n4.Rescue: ..,\n5.…"
     else:
+        #Raise an error if task is invalid
         raise ValueError("Invalid task. Choose either 'QA' or 'GuideLine' or 'caseSearch'")
 
     print("set system prompt")
     
+    #Build the user prompt depending on task
     if context == None:
         pass
     if task == "caseSearch":
@@ -22,6 +24,7 @@ def get_LLM_output(task, context, user_input):
     else:
         user_prompt = f"[Context]: {context}\n[Input]: {user_input}"
 
+    #Construct prompt template in Genie-compatible format
     if system_prompt:
         prompt_template = (
             "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\\n\\n"
@@ -35,12 +38,14 @@ def get_LLM_output(task, context, user_input):
         )
 
     escaped_prompt = prompt_template.replace('"', '`"').replace("'", "''")
+    #Build command string to call external Genie executable
     command = f'../genie_bundle/genie-t2t-run.exe -c genie_config.json -p "{escaped_prompt}"' ##should change the path to genie_bundle
 
     try:
         print("Executing PowerShell command...")
         print(f"Command: {command}")
-
+        
+        #Execute external process with PowerShell
         result = subprocess.run(
             ["powershell", "-Command", command],
             check=True,
@@ -48,7 +53,8 @@ def get_LLM_output(task, context, user_input):
             text=True,
             encoding='cp949'
         )
-
+        
+        #Return model output text (stdout)
         return result.stdout.strip()
 
     except subprocess.CalledProcessError as e:
@@ -61,8 +67,6 @@ def get_LLM_output(task, context, user_input):
     
     # if context == None: 
     #     model_name = "meta-llama/Llama-3.2-3B-Instruct"
-    #     # 사용자 질문에 대해 무조건 vectorDB에 존재하는게 아님 
-    #     # 이때, 어떻게 처리할 지 생각해야함 -> 유사도가 낮을 때, 현재 DB에는 없는 정보지만, 이런식으로 생각한다 같이 처리? 
     #     pass 
 
     # model = AutoModelForCausalLM.from_pretrained(

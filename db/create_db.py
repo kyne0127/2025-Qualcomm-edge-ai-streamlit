@@ -15,13 +15,13 @@ embeddings = HuggingFaceEmbeddings(
     encode_kwargs={'normalize_embeddings': True}
 )
 
-# 현재 chunks를 이용하여 vector db 생성
+#Create a vector database from given chunks
 def create_vector_db(chunks):
     global embeddings
     db = FAISS.from_documents(chunks, embedding=embeddings, distance_strategy = DistanceStrategy.COSINE)
     return db
 
-# 현재 chunk와 db를 이용하여 db와 연결된 retriever 생성
+#Create a retriever connected to the database using given chunks and db
 def get_retriver(chunks, db):
     kiwi_bm25_retriever = KiwiBM25Retriever.from_documents(chunks)
     faiss_retriever = db.as_retriever(search_kwargs={"k": 2})
@@ -35,12 +35,12 @@ def get_retriver(chunks, db):
     return retriever
 
 
-# 단일 PDF 파일 처리
-#ex) path: ./data/지하구조물_매뉴얼.pdf, base_directory: /home/a2024712006/qualcomm/
+#Process a single PDF file
+#ex) path: ./data/TunnelManual.pdf, base_directory: /home/user/project/
 def process_single_pdf(path, base_directory):
     path = base_directory + path
-    category = path.split('/')[-1].split('_')[0] # 카테고리 추출
-    case_or_manual = path.split('/')[-1].split('_')[1].split('.')[0] ##메뉴얼/케이스 추출
+    category = path.split('/')[-1].split('_')[0] #extract category
+    case_or_manual = path.split('/')[-1].split('_')[1].split('.')[0] ##extract manual/case
     print(f"Processing {category}...")
     
     chunks = process_pdf(path)
@@ -50,12 +50,11 @@ def process_single_pdf(path, base_directory):
 
 
 
-# 모든 pdf 파일에 대해 카테고리별 vector db 생성
-# df에 있는 Source_path를 기준으로 pdf 파일을 읽어와서 vector db 생성
-
+#Create category-based vector databases for all PDF files
+#Read PDF files based on source_path in the dataframe and create vector DBs
 def process_pdfs_from_dataframe(df, base_directory):
     pdf_databases = {}
-    unique_paths = df['Source_path'].unique() # 중복되지 않은 경로만 추출
+    unique_paths = df['Source_path'].unique() # extract unique paths only
 
     for path in tqdm(unique_paths):
         category, case_or_manual, retriever, chunks, db = process_single_pdf(path, base_directory)
@@ -65,27 +64,22 @@ def process_pdfs_from_dataframe(df, base_directory):
     print(pdf_databases)
     return pdf_databases
 
-# local 저장
+#Save vector databases locally
 def save_pdf_databases(pdf_databases, filename):
     with open(filename, 'wb') as f:
         pickle.dump(pdf_databases, f)
 
-# local 로드 
+#Load vector databases locally
 def load_pdf_databases(filename):
     with open(filename, 'rb') as f:
         return pickle.load(f)
     
 if __name__ == "__main__":
     print("Creating vector databases from PDF files...")
-    base_directory = "/NAS/internship/JCY/2025-summer/develop/emerGen/"
+    base_directory = "/NAS/internship/JCY/2025-summer/develop/emerGen/" ##change to your own directory path
     df = pd.read_csv(base_directory + "data/full_data.csv")
     pdf_databases = process_pdfs_from_dataframe(df, base_directory)
     save_pdf_databases(pdf_databases, base_directory + "pdf_databases.pkl")
     print("Vector databases created and saved successfully.")
-    
-# 일단 고려사항 
-# 1. 각 카테고리에 추가로 pdf 파일이 추가되면, 해당 카테고리의 retriever를 업데이트해야 함
-# 2. 현재는 각 카테고리별 문서 1개씩만 처리하고 있지만, 여러 개의 문서를 처리할 수 있도록 확장 가능
-
 
  

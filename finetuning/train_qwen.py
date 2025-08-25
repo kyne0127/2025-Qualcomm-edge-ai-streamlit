@@ -11,6 +11,7 @@ OUT_DIR = "qwen25_7b_format_lora_qa_guide"
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 def main():
+    #Quantization config (QLoRA: 4-bit)
     bnb = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",    
@@ -18,10 +19,12 @@ def main():
         bnb_4bit_use_double_quant=True 
     )
 
+    #Load tokenizer
     tok = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=True)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
+    #Load model with quantization
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         quantization_config=bnb,
@@ -30,7 +33,7 @@ def main():
     model.config.use_cache = False
 
 
-    # LoRA 설정
+    #LoRA config(targeting key projection modules)
     TARGETS = ["q_proj","k_proj","v_proj","o_proj"]
     lora_cfg = LoraConfig(
         r=16, lora_alpha=32, lora_dropout=0.05,
@@ -41,7 +44,7 @@ def main():
     model = get_peft_model(model, lora_cfg)
 
 
-    # 데이터 로드
+    #Load dataset
     data_files = {
         "train": os.path.join(DATA_DIR, "train.jsonl"),
         "validation": os.path.join(DATA_DIR, "val.jsonl"),
@@ -61,6 +64,7 @@ def main():
             texts.append(prompt + resp)
         return texts
 
+    #SFT training configuration
     sft_cfg = SFTConfig(
         output_dir=OUT_DIR,
         num_train_epochs=3,
@@ -88,7 +92,7 @@ def main():
         packing=False
     )
 
-
+    #Train and save
     trainer.train()
     trainer.save_model()
     tok.save_pretrained(OUT_DIR)

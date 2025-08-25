@@ -6,14 +6,16 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from peft import PeftModel
 from tqdm import tqdm
 
-# ===== 경로/설정 =====
-MODEL_NAME  = "beomi/Llama-3-Open-Ko-8B-Instruct-preview"
+###Path/Settings###
+MODEL_NAME = "beomi/Llama-3-Open-Ko-8B-Instruct-preview"
 ADAPTER_DIR = "/home/a2024712006/qualcomm/fine_tuning/llama3ko_8b_instr_qa_guide_lora"
-EVAL_PATH   = "/home/a2024712006/qualcomm/fine_tuning/data/eval.jsonl"
-OUT_PATH    = "/home/a2024712006/qualcomm/fine_tuning/eval_outputs_llama.jsonl" 
+EVAL_PATH = "/home/a2024712006/qualcomm/fine_tuning/data/eval.jsonl"
+OUT_PATH = "/home/a2024712006/qualcomm/fine_tuning/eval_outputs_llama.jsonl" 
 
-BATCH_SIZE  = 1     
-SEED        = 42
+BATCH_SIZE = 1     
+SEED = 42
+
+#Detects the type of task (GUIDELINE or QA) from the system message
 def detect_task(messages: List[Dict[str, str]]) -> str:
     for m in messages:
         if m.get("role") == "system":
@@ -27,10 +29,12 @@ def detect_task(messages: List[Dict[str, str]]) -> str:
 def main():
     torch.manual_seed(SEED)
 
+    #Load tokenizer
     tok = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=True)
-    if tok.pad_token is None:
+    if tok.pad_token is None: #Set pad_token to eos_token if missing
         tok.pad_token = tok.eos_token
 
+    #Load base model
     base = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         device_map="auto",
@@ -38,6 +42,7 @@ def main():
     )
     base.config.use_cache = True
 
+    #Load LoRA adapter
     if not os.path.isdir(ADAPTER_DIR):
         raise FileNotFoundError(f"LoRA 어댑터 디렉터리 없음: {ADAPTER_DIR}")
     model = PeftModel.from_pretrained(base, ADAPTER_DIR)
@@ -46,6 +51,7 @@ def main():
     eot_id = tok.convert_tokens_to_ids("<|eot_id|>")
     eos_id = tok.eos_token_id
 
+    #Load evaluation dataset
     ds = load_dataset("json", data_files={"eval": EVAL_PATH})["eval"]
     print(f"Loaded eval set: {len(ds)} samples")
 
@@ -59,19 +65,22 @@ def main():
             task = detect_task(messages)
             max_new = 220 if task == "GUIDELINE" else 140
 
+             #Build prompt using chat template
             prompt = tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
             inputs = tok(prompt, return_tensors="pt").to(model.device)
 
+            #Run inference
             with torch.inference_mode():
                 gen_ids = model.generate(
                     **inputs,
                     max_new_tokens=max_new,
                     do_sample=False,     
                     top_p=1.0,
-                    eos_token_id=[eos_id, eot_id],
+                    eos_token_id=[eos_id, eot_id], #Stop generation at EOS or <|eot_id|>
                     pad_token_id=tok.eos_token_id,
                 )
 
+            #Decode generated output (excluding prompt tokens)
             prompt_len = inputs["input_ids"].shape[-1]
             out_text = tok.decode(gen_ids[0][prompt_len:], skip_special_tokens=True).strip()
             if task == "GUIDELINE":

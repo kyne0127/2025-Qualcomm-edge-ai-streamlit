@@ -3,45 +3,45 @@ from langchain.schema import Document
 import fitz  # PyMuPDF
 
 def process_pdf(file_path):
-    # 1. pdf별 page 추출
+    # 1.Extract pages from the PDF
     doc = fitz.open(file_path)
     chunk_temp = []
     for page_number in range(doc.page_count):
         page = doc.load_page(page_number)
         
-        #2. page별 테이블 추출 
+        #2. Extract tables per page 
         tables = page.find_tables()
         raw_text_list = []
         for table in tables:
-            # 테이블을 감싸는 영역 계산
+            #Calculate the bounding box surrounding the table
             min_x, min_y = float('inf'), float('inf')
             max_x, max_y = float('-inf'), float('-inf')
             
             for cell in table.cells:
-                x0, y0, x1, y1 = cell[:4]  # 셀 좌표 추출
+                x0, y0, x1, y1 = cell[:4]  #Extract cell coordinates
                 min_x = min(min_x, x0)
                 min_y = min(min_y, y0)
                 max_x = max(max_x, x1)
                 max_y = max(max_y, y1)
-            # 1) 발견된 테이블 영역 
+            #1) Bounding box of the detected table
             table_rect = fitz.Rect(min_x, min_y, max_x, max_y)
-            # 2) 발견된 테이블 영역의 테이블 형식 텍스트
+            #2) Table text in structured (row/column) format
             table_text = "\n"
             for row in table.extract():
                 table_text += str(row)
                 table_text += "\n"
-            # 3) 발견된 테이블 영역의 날 것 텍스트 
+            #3) Raw text inside the detected table area
             clipped_text = page.get_text("text", clip=table_rect)
             
-            # 4) 날 것 텍스트 => 테이블 형식 텍스트로 변환
+            #4) Replace raw text with structured table text
             raw_text_list.append((clipped_text, table_text))
             
-        # 2. page별 이미지 추출        
+        #2. Extract images per page       
         extractor = daconCustomExtractor(page)
         bboxes = extractor.detect_svg_contours(page_number+1, min_svg_gap_dx=25.0, min_svg_gap_dy=25.0, min_w=2.0, min_h=2.0)
 
                 
-        # 3. 이미지별 텍스트 추출
+        #3. Extract text per image/section
         for i, bbox in enumerate(bboxes):
             x0, y0, x1, y1 = bbox 
             
@@ -52,5 +52,6 @@ def process_pdf(file_path):
                     
             chunk_temp.append(full_text)
             
+    #Wrap extracted text chunks into LangChain Document objects        
     chunks = [Document(page_content=t) for t in chunk_temp]
     return chunks

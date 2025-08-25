@@ -10,11 +10,12 @@ OUT_DIR    = "llama3ko_8b_instr_qa_guide_lora"
 DATA_DIR   = os.path.join(os.path.dirname(__file__), "data")
 
 def main():
-
+    #Load tokenizer
     tok = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=True)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
+    #Load base model
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         device_map="auto",              
@@ -22,6 +23,8 @@ def main():
     )
     model.config.use_cache = False
     model.gradient_checkpointing_enable()
+    
+    #Define LoRA configuration (targeting attention + MLP projection layers)
     TARGETS = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
     lora_cfg = LoraConfig(
         r=16,
@@ -33,7 +36,7 @@ def main():
     )
     model = get_peft_model(model, lora_cfg)
 
-    # 데이터 로드
+    #Load dataset
     data_files = {
         "train": os.path.join(DATA_DIR, "train.jsonl"),
         "validation": os.path.join(DATA_DIR, "val.jsonl"),
@@ -43,6 +46,7 @@ def main():
     val_ds   = ds["validation"]
     print(f"Train size: {len(train_ds)}, Val size: {len(val_ds)}")
 
+    #Formatting function: convert messages + response into text input
     def formatting(examples):
         texts = []
         for msgs, resp in zip(examples["messages"], examples["response"]):
@@ -52,6 +56,7 @@ def main():
             texts.append(prompt + resp)
         return texts
 
+    #Training configuration
     sft_cfg = SFTConfig(
         output_dir=OUT_DIR,
         num_train_epochs=3,
@@ -69,6 +74,7 @@ def main():
         fp16=False,
     )
 
+    #trainer
     trainer = SFTTrainer(
         model=model,
         tokenizer=tok,
@@ -80,6 +86,7 @@ def main():
         packing=False
     )
 
+    #train and save
     trainer.train()
     trainer.save_model()
     tok.save_pretrained(OUT_DIR)

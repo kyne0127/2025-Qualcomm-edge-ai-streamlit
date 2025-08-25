@@ -11,17 +11,20 @@ OUT_DIR    = "llama3ko_8b_instr_qa_guide_lora"
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 def main():
+    #Quantization config (QLoRA: 4-bit)
     bnb = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",
         bnb_4bit_compute_dtype=torch.bfloat16,
         bnb_4bit_use_double_quant=True
     )
-
+    
+    #Load tokenizer
     tok = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=True)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
+    #Load model with quantization
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         quantization_config=bnb,
@@ -30,10 +33,13 @@ def main():
     )
     model.config.use_cache = False
 
+    #Prepare model for k-bit training (enables gradient checkpointing, etc.)
     model = prepare_model_for_kbit_training(
         model,
         use_gradient_checkpointing=True
     )
+    
+    #LoRA config(targeting key projection modules)
     TARGETS = ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
     lora_cfg = LoraConfig(
         r=16,
@@ -45,6 +51,7 @@ def main():
     )
     model = get_peft_model(model, lora_cfg)
 
+    #Load dataset
     data_files = {
         "train": os.path.join(DATA_DIR, "train.jsonl"),
         "validation": os.path.join(DATA_DIR, "val.jsonl"),
@@ -56,6 +63,7 @@ def main():
     print(f"Train size: {len(train_ds)}, Val size: {len(val_ds)}")
     print("DATA_DIR:", DATA_DIR)
 
+    #Data formatting function
     def formatting(examples):
         texts = []
         for msgs, resp in zip(examples["messages"], examples["response"]):
@@ -65,6 +73,7 @@ def main():
             texts.append(prompt + resp)
         return texts
 
+    #SFT training configuration
     sft_cfg = SFTConfig(
         output_dir=OUT_DIR,
         num_train_epochs=3,
@@ -92,6 +101,7 @@ def main():
         packing=False             
     )
 
+    #Train and save
     trainer.train()
     trainer.save_model()
     tok.save_pretrained(OUT_DIR)
