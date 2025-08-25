@@ -1,0 +1,236 @@
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: Sunstroke causes a rapid rise in body temperature to 39–40℃ or higher due to direct sunlight exposure, and in severe cases, about 25% may die. The patient should be moved to a cool shaded area and have a cold wet towel or ice pack applied to the forehead, etc., to slowly lower the body temperature without urgency, and if the fever rises again, cooling should be repeated. Heat exhaustion occurs in poorly ventilated places or from direct sunlight, when excessive sweating leads to salt loss. If the complexion turns pale, the whole body is covered in cold sweat, pulse and breathing weaken, and consciousness decreases, it can be fatal. In this case, place the person in a well-ventilated area, lay them down with the head level and legs elevated while keeping warm, give them salt water (1 cup water + 1 spoon salt), then provide tea or cold water as drinks.\n[Input]: What drinks should be given to a heat exhaustion patient?"
+            }
+    ],
+    "response": "A heat exhaustion patient should be given salt water (1 cup of water mixed with 1 spoon of salt), as well as tea or cold water."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: In frostbite first aid, recovery of whole-body temperature comes first. Move the patient to a place where cold can be avoided and secure whole-body warmth. For local treatment, either rapid rewarming (immersing the frostbitten area in warm water of 40–42℃ for about 30 minutes) or gradual rewarming (warming step by step starting from about 5℃, with moderate intake of warm coffee or soup) should be performed depending on the situation. Apply antibiotic ointment to the frostbitten area and prevent blister infection with sterile dressing. On site, remove clothing and shoes from the frostbitten area and remove rings, watches, or tight objects in advance in case of swelling. If the hand is frostbitten, place it under the rescuer’s armpit; if the foot, place it under the rescuer’s armpit to warm it. Keep the affected area elevated to reduce swelling and pain. Do not burst blisters; wrap with soft cloth and transport to hospital. Do not allow walking on frostbitten feet.\n[Input]: What is the first action to take when frostbite occurs?"
+            }
+    ],
+    "response": "When frostbite occurs, first move the patient to a place protected from the cold and secure whole-body warmth to restore body temperature."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: When a muscle cramp occurs, first gently stretch the painful area in the opposite direction to relieve tension while slowly massaging it with the hand. For calf (gastrocnemius) cramps, stretch by forcefully pulling the ankle toward the body (pulling the toes). For front thigh (quadriceps) cramps, bend the lower leg backward deeply to stretch. For back thigh (hamstring) cramps, stretch with the leg kept straight while bending the ankle forward forcefully. If warm water is available, soak a towel in it and apply as a warm compress to the cramping area to help muscle relaxation.\n[Input]: What is the first action to take during a calf cramp while hiking?"
+            }
+    ],
+    "response": "During a calf cramp while hiking, the first action is to pull the ankle strongly toward the body to stretch by pulling the toes."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "• 1. Hold onto something stable to avoid falling during impact, and immediately notify those around of any breakage, leakage, or fire.\n• 2. Move to the assembly point following crew instructions and secure emergency exits.\n• 3. Prohibit use of electrical sparks or flames and restrict access to hazardous or damaged areas.\n• 4. Passengers should prioritize safe evacuation over taking photos or videos and listen to announcements.\n• 5. If necessary, prepare to board lifeboats/life rafts (verify the list, maintain order).\n• 6. If injuries occur, report immediately and follow the instructions of the first aid officer.\n[Input]: What actions must be prohibited during a ship grounding?"
+            }
+    ],
+    "response": "During a ship grounding, the use of electrical sparks or flames, accessing hazardous/damaged areas, and taking photos or videos instead of prioritizing safety must be prohibited."
+}
+
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "• 1. Immediately press the emergency button (DSC) or call “MAYDAY” three times on VHF Channel 16, then clearly state the ship’s name, position, type of accident, assistance needed, number of people, and ship status.\n• 2. If a mobile phone is available, report to the Coast Guard at 122 (119 on land) and repeatedly confirm location information.\n• 3. Activate emergency equipment such as EPIRB/SART and prioritize emergency communications by refraining from unnecessary transmissions.\n• 4. If a false or duplicate alert is sent, cancel immediately.\n• 5. Communication instructions are handled by the crew; passengers should listen to announcements and minimize questions.\n[Input]: What is the first word to call out when reporting maritime distress?"
+            }
+    ],
+    "response": "The first word to call out when reporting maritime distress is “MAYDAY.”"
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "• 1. Follow the crew’s instructions.\n• 2. Wear layered thin clothing and carry a life jacket.\n• 3. Report to the crew if a fire occurs or if there are injuries.\n• 4. Evacuate using emergency exits as instructed by the crew, being careful not to be swept away by the crowd.\n• 5. Board lifeboats or life rafts according to crew instructions.\n• 6. If you must jump, keep your legs straight, cover your mouth and nose with one hand, and jump as far as possible.\n[Input]: What posture should you take when jumping off a flooded ship?"
+            }
+    ],
+    "response": "When jumping off a flooded ship, keep your legs straight, cover your mouth and nose with one hand, and jump as far as possible."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "The measurement index is WBGT (Wet Bulb Globe Temperature Index), which integrates evaluation of temperature, humidity, and radiant heat. Measurements should be taken regularly at least once every 6 months, and as needed if symptoms are reported or risks are suspected. The method is to measure continuously at 10-minute intervals for the 1 hour of highest heat exposure during the day, at the closest worker to the heat source or main work area. The evaluation reflects WBGT values, work metabolic rate, and clothing correction values to determine whether exposure limits are exceeded, and to decide appropriate work–rest times according to work intensity.\n[Input]: What index is used to evaluate high-temperature work environments?"
+            }
+    ],
+    "response": "High-temperature work environment evaluation uses the WBGT (Wet Bulb Globe Temperature Index), which integrates temperature, humidity, and radiant heat."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "Heat cramps: When excessive sweating causes salt loss, muscle cramps and pain appear in the limbs or abdomen. After cooling, 0.1% saline should be consumed, and the affected area stretched and massaged.\n[Input]: What drink is recommended when heat cramps occur?"
+            }
+    ],
+    "response": "When heat cramps occur, it is recommended to drink 0.1% saline."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: Inside a collapsed building, do not panic and look around to find an evacuation route. Temporarily shelter in sturdy areas like elevator lobbies or stairwells, then move with injured persons to a safe zone and provide first aid. Normally, know the locations of escape devices, ropes, and flashlights. In an accident, secure passage and prioritize evacuating the elderly, children, and women. The lead of the rescue line should be a healthy adult familiar with the building, and protect the head against falling objects with cushions while moving quickly and orderly. Do not move obstacles if possible; if unavoidable, handle them carefully considering further collapse risk. If isolation may be prolonged, cover head and face with coats, blankets, newspapers, or boxes, and conserve food and water found in refrigerators, etc. If trapped in debris, move fingers and toes frequently to maintain circulation. When rescuers call, respond calmly and signal by flashing a flashlight, shouting loudly, or banging pipes, but avoid wasting energy with unnecessary shouting. Requests for help can be made with regular banging sounds, vocal signals, or calling 119 by phone. Even in poor reception areas, save battery by periodically turning the phone off and on. Stay in well-ventilated places such as windows, bare walls, or under sturdy tables with a low posture, and remain in the safe zone once reached. Do not use broken stairs or elevators. If gas leakage is suspected, never use ignition sources like matches or heaters; only use flashlights.\n[Input]: In the event of a building collapse, which internal places must be avoided?"
+            }
+    ],
+    "response": "In a building collapse, avoid elevators and broken stairs. Safe areas include sturdy stairwells, windows, bare walls, or under sturdy tables."
+}
+
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: If you smell gas, hear hissing sounds, or see damaged pipes, immediately stop actions that may cause flames or sparks such as using lighters, matches, or switches. If electricity is suspected, never touch electrical devices with wet hands or while standing on wet floors, and avoid exposed wires while moving. If smoke or a pungent smell is detected, move in a low posture while covering your mouth and nose with a wet cloth or mask, and evacuate to the opposite side of the wind. Before opening a door, check for heat or smoke from thresholds and gaps; if hot, do not open. When using a fire extinguisher, follow PASS (Pull the pin, Aim at the base, Squeeze the handle, Sweep side to side). If flames spread to the ceiling or signs of expansion appear, evacuate immediately and report.\n[Input]: After a building collapse, what action must absolutely not be taken if you smell gas?"
+            }
+    ],
+    "response": "If you smell gas, never use lighters, matches, or electrical switches that can create flames or sparks."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: Upon arriving at a safe zone, re-check headcount and observe even minor injury cases for delayed symptoms such as inhalation injury, shock, or hypothermia. Do not re-enter until gas, electricity, water supply restoration, and safety inspection are complete. Clean wounds, replace dressings, maintain strict hand hygiene, and avoid contact with contaminated water and debris. Pregnant women and infants should receive triage. For hyperventilation, anxiety, or confusion, provide warmth and breathing guidance in a quiet space, and connect to professional counseling if needed. Finally, briefly record accident time, place, casualties, damages, and actions taken, then submit to the disaster HQ and insurance company.\n[Input]: What principle must be followed upon arrival at a safe zone after a building collapse?"
+            }
+    ],
+    "response": "Upon arriving at a safe zone after a building collapse, re-check headcount, observe delayed symptoms, and do not re-enter until restoration and safety inspection are complete."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: Infant airway obstruction is treated by placing the head lower and giving 5 back blows. For toddlers, the Heimlich maneuver is performed.\n[Input]: What is the immediate treatment when an infant breathes rapidly due to a foreign object?"
+            }
+    ],
+    "response": "For infant airway obstruction, place the head lower and deliver 5 firm back blows to the center of the back to expel the object."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: Upon arriving at a safe zone, re-check headcount and observe even minor injury cases for delayed symptoms such as inhalation injury, shock, or hypothermia. Do not re-enter until gas, electricity, water supply restoration, and safety inspection are complete. Clean wounds, replace dressings, maintain strict hand hygiene, and avoid contact with contaminated water and debris. Pregnant women and infants should receive triage. For hyperventilation, anxiety, or confusion, provide warmth and breathing guidance in a quiet space, and connect to professional counseling if needed. Finally, briefly record accident time, place, casualties, damages, and actions taken, then submit to the disaster HQ and insurance company.\n[Input]: What principles must be followed upon arrival at a safe zone after a building collapse?"
+            }
+    ],
+    "response": "Upon arrival at the safe zone, re-check headcount, monitor for delayed symptoms, prohibit re-entry, maintain hygiene and warmth, and record and report details."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: Attempt evacuation only if there are clear signs of fire/smoke spread, gas leak, or secondary collapse, and when a safe route is confirmed by light, markers, wind direction, or rescuer voices. If the passage is unclear, smoke is thick, continuous collapse sounds are heard, or movement is risky due to fatigue/injury, stay put. If moving, connect at least two people with ropes or clothing, agree on exit, detour, or assembly point before departure, and check for heat or smoke at the top of doors before opening. Move along walls in a low posture, leaving simple markers (arrows, time, people) along the way. For vertical movement such as stairs/ladders, pass one person at a time, checking handrails.\n[Input]: When should self-evacuation be attempted if trapped in a building?"
+            }
+    ],
+    "response": "Attempt self-evacuation only when there are no signs of fire/smoke spread, gas leak, or secondary collapse, and when a safe route is confirmed by light, markers, wind direction, or rescuer voices."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: Report to 119 by all available means and concisely provide location clues such as building name, floor, nearby landmarks, and audible sounds. If communication is unstable, keep the mobile phone in airplane mode and periodically switch it on to search for signals, conserving battery. If communication with the outside is impossible, signal your location regularly, such as banging pipes or walls at 10-second intervals, flashing a flashlight, or blowing a whistle three times repeatedly. Once connected with rescuers, one representative should summarize headcount, injury severity, hazards, and actions already taken to reduce duplicate communication.\n[Input]: How can you send rescue signals when trapped?"
+            }
+    ],
+    "response": "Call 119 if possible, or if communication is unavailable, signal location by banging pipes or walls, flashing a flashlight, or blowing a whistle three times repeatedly."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: If you smell gas, hear hissing sounds, or see damaged pipes, immediately stop actions that may cause flames or sparks such as using lighters, matches, or switches. If electricity is suspected, never touch electrical devices with wet hands or while standing on wet floors, and avoid exposed wires while moving. If smoke or a pungent smell is detected, move in a low posture while covering your mouth and nose with a wet cloth or mask, and evacuate to the opposite side of the wind. Before opening a door, check for heat or smoke from thresholds and gaps; if hot, do not open. When using a fire extinguisher, follow PASS (Pull the pin, Aim at the base, Squeeze the handle, Sweep side to side). If flames spread to the ceiling or signs of expansion appear, evacuate immediately and report.\n[Input]: After a building collapse, what action must absolutely not be taken if you smell gas?"
+            }
+    ],
+    "response": "Never use lighters, matches, or electrical switches that could cause flames or sparks if you smell gas."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: Inside a collapsed building, do not panic and look around to find an evacuation route. Temporarily shelter in sturdy areas like elevator lobbies or stairwells, then move with injured persons to a safe zone and provide first aid. Normally, know the locations of escape devices, ropes, and flashlights. In an accident, secure passage and prioritize evacuating the elderly, children, and women. The lead of the rescue line should be a healthy adult familiar with the building, and protect the head against falling objects with cushions while moving quickly and orderly. Do not move obstacles if possible; if unavoidable, handle them carefully considering further collapse risk. If isolation may be prolonged, cover head and face with coats, blankets, newspapers, or boxes, and conserve food and water found in refrigerators, etc. If trapped in debris, move fingers and toes frequently to maintain circulation. When rescuers call, respond calmly and signal by flashing a flashlight, shouting loudly, or banging pipes, but avoid wasting energy with unnecessary shouting. Requests for help can be made with regular banging sounds, vocal signals, or calling 119 by phone. Even in poor reception areas, save battery by periodically turning the phone off and on. Stay in well-ventilated places such as windows, bare walls, or under sturdy tables with a low posture, and remain in the safe zone once reached. Do not use broken stairs or elevators. If gas leakage is suspected, never use ignition sources like matches or heaters; only use flashlights.\n[Input]: In a building collapse, which internal places must be avoided?"
+            }
+    ],
+    "response": "Do not use broken stairs or elevators. Safe areas include sturdy stairwells, elevator lobbies, under sturdy tables, or against bare walls near windows."
+}
+{
+    "messages": [
+        {
+            "role": "system", 
+            "content": "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
+        }, 
+            {
+                "role": "user", 
+                "content": "[Context]: • Field responders must not deploy vehicles or equipment downwind, in low-lying areas, or partitioned sections around the leak site.\n• Approach with your back to the wind and assess material information and site conditions from as far a distance as possible, establishing a control line at the initial safe distance.\n• Wear effective personal protective equipment (such as Level A chemical protective suits) suitable for the substance.\n• After recovery of leaked material, conduct neutralization work for residual substances if necessary, and use analyzers to measure and confirm whether levels are below permissible limits.\n• Hazardous substance management begins by understanding the status of hazardous substances used in the workplace (type, amount, usage, location, etc.), and utilizing Material Safety Data Sheets (MSDS) and workplace environment measurement reports.\n[Input]: What protective equipment must be worn when approaching a hazardous chemical spill site?"
+            }
+    ],
+    "response": "When approaching a hazardous chemical spill site, Level A chemical protective suits effective against the substance must be worn."
+}
