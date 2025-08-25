@@ -44,8 +44,8 @@ st.markdown(f"""
 
 if "messages" not in st.session_state:
     st.session_state.messages = [{'text': 'Please select the category that best fits your situation.', "isUser": False}]
-# if "category" not in st.session_state:
-st.session_state.category = ""
+if "category" not in st.session_state:
+    st.session_state.category = ""
 if "input" not in st.session_state:
     st.session_state.input = ""
 if "is_loading" not in st.session_state:
@@ -98,8 +98,9 @@ for message in st.session_state.messages:
                     "nav-link-selected": {"background-color": "#ffb894", "color": "white"},
                 }
             )
+            st.session_state.category = selected
+            
             if selected != "None Selected": ##suggest user recommended questions for each selected category
-                st.session_state.category = selected
                 if selected == "Collapse":
                     st.session_state.messages.append({'text': f"""You have selected the {selected} category.\n
                                                                     [Example Questions]\n

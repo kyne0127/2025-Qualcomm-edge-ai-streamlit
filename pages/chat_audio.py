@@ -58,8 +58,8 @@ st.markdown(f"""
 
 if "messages" not in st.session_state:
     st.session_state.messages = [{'text': 'Please select the category that best fits your situation.', "isUser": False}]
-# if "category" not in st.session_state:
-st.session_state.category = ""
+if "category" not in st.session_state:
+    st.session_state.category = ""
 if "input" not in st.session_state:
     st.session_state.input = ""
 if "is_loading" not in st.session_state:
