@@ -6,11 +6,11 @@ def get_LLM_output(task, context, user_input):
     model_name = "meta-llama/Llama-3.2-3B-Instruct"
 
     if task == "GuideLine":
-        system_prompt = "[TASK=GUIDELINE]\\nThis is an emergency disaster situation. Generate guidelines based on the Context and the user's question. Keep the response under 500 characters. (Use concise sentences after numbers; avoid unnecessary explanations or introductions)."
+        system_prompt = "[TASK=GUIDELINE]\nThis is an emergency disaster situation. Based on the [Context] provided below, create a guideline referring to the [Context]. Output must follow the specified format only.\n\nResponse:\n1. ...\n2. ...\n3. ...\n4. ..."
     elif task == "QA":
-        system_prompt = "[TASK=QA]\\nThis is an emergency disaster situation. Based on the Context provided, answer the user's question with facts only. Keep the response to one sentence under 300 characters, and be concise. (No speculation, unnecessary introductions; maintain original units/numbers)."
+        system_prompt = "[TASK=QA]\nThis is an emergency disaster situation. Based on the [Context] provided below, answer the user's [Input] with facts only. (No assumptions, no unnecessary introduction, keep units/figures exactly as they are)"
     elif task == "caseSearch":
-        system_prompt = "The Input describes how an emergency response case was handled in the past similar emergency cases. Please summarize it in under 500 characters for readability. And if a line break seems necessary, please insert \n in the response. (Use concise sentences after numbers; avoid unnecessary explanations or introductions). "
+        system_prompt = "[TASK=CaseStudy]\n[Context] describes how emergency response cases were handled in past similar emergencies.\nFor readability, please summarize in the following format:\n1.Incident Overview: ..,\n2.Data/Location: ..,\n3.Casualties: ..,\n4.Rescue: ..,\n5.…"
     else:
         raise ValueError("Invalid task. Choose either 'QA' or 'GuideLine' or 'caseSearch'")
 
@@ -19,7 +19,7 @@ def get_LLM_output(task, context, user_input):
     if context == None:
         pass
 
-    user_prompt = f"Context: {context}\\nInput: {user_input}"
+    user_prompt = f"[Context]: {context}\n[Input]: {user_input}"
 
     if system_prompt:
         prompt_template = (
