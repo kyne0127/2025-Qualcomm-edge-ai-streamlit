@@ -151,7 +151,7 @@ if keyword:
             # results= re.findall(r"<case>(.*?)</case>", output, re.DOTALL)
         st.markdown(f"""<div style="display:flex; gap:20px; justify-content:center;">""", unsafe_allow_html = True)
         for result in results:
-            output = get_LLM_output("caseSearch", keyword, result)
+            output = get_LLM_output("caseSearch", result, keyword)
             st.markdown(f"""
                         <div style="background-color: white; padding: 25px 20px; border-radius:20px; width: 350px; min-height: 100px; margin-bottom: 30px;">
                             <div style="display:flex; margin-bottom:5px;">

@@ -18,7 +18,7 @@ def get_LLM_output(task, context, user_input):
     
     if context == None:
         pass
-    if task = "caseSearch":
+    if task == "caseSearch":
         user_prompt = f"[Context]: {context}"
     else:
         user_prompt = f"[Context]: {context}\n[Input]: {user_input}"
