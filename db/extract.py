@@ -94,6 +94,6 @@ class daconCustomExtractor:
     
     @staticmethod
     def _pixmap_to_cv_image(pixmap: fitz.Pixmap):
-        #Convert PyMuPDF Pixmap to an OpenCV image (numpy array)
+        #Convert PyMuPDF Pixmap to an OpenCV image(numpy array)
         img_byte = pixmap.tobytes()
         return cv.imdecode(np.frombuffer(img_byte, np.uint8), cv.IMREAD_COLOR)
