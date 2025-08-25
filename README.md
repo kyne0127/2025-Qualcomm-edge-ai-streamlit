@@ -234,7 +234,9 @@ python db/create_db.py
 
 </details>
 
-### 3️⃣Generate Database Pickle File
+<br/>
+
+### 4️⃣Change base directory path
 **1. Open 'create_db.py' and change the base_directory to your own path for this repository**
 ```python
 base_directory = '[your_own_path]' #line 80
