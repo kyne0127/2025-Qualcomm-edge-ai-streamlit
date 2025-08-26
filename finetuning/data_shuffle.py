@@ -1,11 +1,11 @@
 import json, random, re
 from pathlib import Path
 
-# ===== 설정 =====
-QA_PATH         = "/home/a2024712006/qualcomm/fine_tuning/data/train_en_qa.jsonl"
-CASE_PATH       = "/home/a2024712006/qualcomm/fine_tuning/data/train_en_case.jsonl"
-GUIDE_PATH      = "/home/a2024712006/qualcomm/fine_tuning/data/train_en_guide.jsonl"
-OUT_ALL_PATH    = "/home/a2024712006/qualcomm/fine_tuning/data/train_en_all.jsonl"
+# ===== setting =====
+QA_PATH         = "../data/train_en_qa.jsonl"
+CASE_PATH       = "../data/train_en_case.jsonl"
+GUIDE_PATH      = "../data/train_en_guide.jsonl"
+OUT_ALL_PATH    = "../data/train_en_all.jsonl"
 
 SEED            = 42
 
