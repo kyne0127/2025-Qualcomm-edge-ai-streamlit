@@ -1,89 +1,81 @@
-import os, json
-import torch
+# eval_all_llama.py
+import os, json, torch, re
+from typing import List, Dict, Any
 from datasets import load_dataset
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from trl import SFTTrainer, SFTConfig
-from peft import LoraConfig, get_peft_model
-os.environ["TOKENIZERS_PARALLELISM"] = "false" #DDP set
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+from peft import PeftModel
+from tqdm import tqdm
 
-MODEL_NAME = "meta-llama/Llama-3.2-3B-Instruct"
-OUT_DIR    = "llama3_3b_instr_lora"
-DATA_DIR   = os.path.join(os.path.dirname(__file__), "data")
+# ===== Paths / Settings =====
+MODEL_NAME  = "hwan99/llama3ko-3b-qualcomm-lora_merged_v1"
+EVAL_PATH   = "/home/a2024712006/qualcomm/fine_tuning/data/eval_en.jsonl"
+OUT_PATH    = "/home/a2024712006/qualcomm/fine_tuning/eval_outputs_en_llama_fine_tune.jsonl"  # Save path for results
+
+BATCH_SIZE  = 1         # Safer to generate one at a time
+SEED        = 42
 
 def main():
+    torch.manual_seed(SEED)
+
+    # ===== Tokenizer =====
     tok = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=True)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
+    # ===== Load Model =====
     model = AutoModelForCausalLM.from_pretrained(
-        MODEL_NAME,       
-        torch_dtype=torch.bfloat16,     
+        MODEL_NAME,
+        device_map="auto",
+        torch_dtype=torch.bfloat16,
     )
-    model.config.use_cache = False
-    # model.gradient_checkpointing_enable()
-    TARGETS = ["q_proj","k_proj","v_proj","o_proj"]
-    lora_cfg = LoraConfig(
-        r=8,
-        lora_alpha=16,
-        lora_dropout=0.05,
-        target_modules=TARGETS,
-        bias="none",
-        task_type="CAUSAL_LM"
-    )
-    model = get_peft_model(model, lora_cfg)
+    model.config.use_cache = True
+    model.eval()
 
-    # 데이터 로드
-    data_files = {
-        "train": os.path.join(DATA_DIR, "train_en_all.jsonl"),
-    }
-    ds = load_dataset("json", data_files=data_files)
-    train_ds = ds["train"]
-    print(f"Train size: {len(train_ds)}")
-    
-    def formatting(examples):
-        texts = []
-        for msgs, resp in zip(examples["messages"], examples["response"]):
-            prompt = tok.apply_chat_template(
-                msgs, tokenize=False, add_generation_prompt=True
-            )
-            texts.append(prompt + resp)
-        return texts
+    # ===== End-of-Text Stop Tokens =====
+    eot_id = tok.convert_tokens_to_ids("<|eot_id|>")
+    eos_id = tok.eos_token_id
 
-    sft_cfg = SFTConfig(
-        output_dir=OUT_DIR,
-        max_steps=200, # formatting 
-        per_device_train_batch_size=1,
-        gradient_accumulation_steps=2,
-        learning_rate=1e-4,
-        lr_scheduler_type="cosine",
-        warmup_steps=20,
-        logging_steps=10,
-        save_strategy="steps",
-        save_steps=100,
-        bf16=True,
-        fp16=False,
-        dataloader_num_workers=4,
-        optim="adamw_torch_fused",
-        ddp_find_unused_parameters=False, # ddp
-        report_to=[]
-    )
+    # ===== Load Evaluation Data =====
+    # eval_dataset.jsonl is assumed to have {"messages":[...], "response": "..."} format 
+    # ("response" may or may not exist)
+    ds = load_dataset("json", data_files={"eval": EVAL_PATH})["eval"]
+    print(f"Loaded eval set: {len(ds)} samples")
 
-    trainer = SFTTrainer(
-        model=model,
-        tokenizer=tok,
-        train_dataset=train_ds,
-        args=sft_cfg,
-        formatting_func=formatting,
-        max_seq_length=4096,
-        packing=False
-    )
+    # ===== Run Inference on All Samples and Save =====
+    n = len(ds)
+    with open(OUT_PATH, "w", encoding="utf-8") as fout:
+        for ex in tqdm(ds, total=n, desc="Infer"):
+            messages = ex.get("messages", None)
+            if not messages:
+                raise ValueError("Sample has no 'messages' field. Please align dataset format.")
 
-    trainer.train()
-    trainer.save_model()
-    tok.save_pretrained(OUT_DIR)
-    print(f"Saved LoRA adapter to: {OUT_DIR}")
+            # Build prompt
+            prompt = tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+            inputs = tok(prompt, return_tensors="pt").to(model.device)
+
+            with torch.inference_mode():
+                gen_ids = model.generate(
+                    **inputs,
+                    max_new_tokens=220,
+                    do_sample=False,          # Deterministic output
+                    top_p=1.0,
+                    eos_token_id=[eos_id, eot_id],
+                    pad_token_id=tok.eos_token_id,
+                )
+
+            # Decode excluding the prompt
+            prompt_len = inputs["input_ids"].shape[-1]
+            out_text = tok.decode(gen_ids[0][prompt_len:], skip_special_tokens=True).strip()
+            out = {
+                "messages": messages,
+                "prediction": out_text,
+            }
+            if "response" in ex and ex["response"] is not None:
+                out["reference"] = ex["response"]
+
+            fout.write(json.dumps(out, ensure_ascii=False) + "\n")
+
+    print(f"[DONE] Saved predictions to: {OUT_PATH}")
 
 if __name__ == "__main__":
     main()
-
-#Multi-gpu시, accelerate launch --num_processes [NUM_GPUS] --mixed_precision bf16 train_llama_lora_3b.py
