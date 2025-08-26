@@ -5,10 +5,10 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
 from huggingface_hub import login
 
-BASE_MODEL = "beomi/Llama-3-Open-Ko-8B-Instruct-preview"
+BASE_MODEL  = "meta-llama/Llama-3.2-3B-Instruct"
 
-ADAPTER_DIR = "/home/a2024712006/qualcomm/fine_tuning/llama3ko_8b_instr_qa_guide_lora" 
-REPO_ID = "hwan99/llama3ko-8b-qualcomm-lora_merged"  
+ADAPTER_DIR = "fine_tuning/llama3_3b_instr_lora"
+REPO_ID     = "hwan99/llama3ko-3b-qualcomm-lora_merged_v1"
 
 def main():
     #Authenticate with Hugging Face Hub
