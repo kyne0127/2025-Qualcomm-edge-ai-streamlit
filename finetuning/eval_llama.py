@@ -8,8 +8,8 @@ from tqdm import tqdm
 
 # ===== Paths / Settings =====
 MODEL_NAME  = "hwan99/llama3ko-3b-qualcomm-lora_merged_v1"
-EVAL_PATH   = "/home/a2024712006/qualcomm/fine_tuning/data/eval_en.jsonl"
-OUT_PATH    = "/home/a2024712006/qualcomm/fine_tuning/eval_outputs_en_llama_fine_tune.jsonl"  # Save path for results
+EVAL_PATH   = "../data/eval_en.jsonl"
+OUT_PATH    = "../data/eval_outputs_en_llama_fine_tune.jsonl"  # Save path for results
 
 BATCH_SIZE  = 1         # Safer to generate one at a time
 SEED        = 42
